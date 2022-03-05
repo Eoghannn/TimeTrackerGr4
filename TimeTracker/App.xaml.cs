@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Storm.Mvvm;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace TimeTracker
 {
-    public partial class App : Application
+    public partial class App : MvvmApplication
     {
-        public App()
+        public App() : base(() => new Login())
         {
             InitializeComponent();
-
-            MainPage = new MainPage();
         }
 
         protected override void OnStart()
