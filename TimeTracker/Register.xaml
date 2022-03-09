@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TimeTracker.Register">
+             xmlns:TimeTracker="clr-namespace:TimeTracker"
+             x:Class="TimeTracker.Register"
+             x:DataType="TimeTracker:RegisterViewModel">
     <ContentPage.Content>
         <StackLayout HorizontalOptions="Center" VerticalOptions="CenterAndExpand">
             <Label Text="Sign up" HorizontalOptions="CenterAndExpand" FontSize="40" Padding="0,0,0,50"/>
@@ -9,7 +11,8 @@
             <Entry x:Name="Lastname" Placeholder="Lastname" WidthRequest="300"/>
             <Entry x:Name="Email" Placeholder="Email" WidthRequest="300"/>
             <Entry x:Name="Password" Placeholder="Password" IsPassword="True" WidthRequest="300"/>
-            <Button Text="Confirm" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
+            <Button Text="Confirm" Command="{Binding Confirm}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
+            <Button Text="Back to login" Command="{Binding Back}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

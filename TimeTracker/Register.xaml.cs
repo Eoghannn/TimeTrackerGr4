@@ -15,6 +15,7 @@ namespace TimeTracker
         public Register()
         {
             InitializeComponent();
+            BindingContext = new RegisterViewModel();
         }
     }
 }

@@ -7,26 +7,28 @@ using Xamarin.Forms;
 
 namespace TimeTracker
 {
-    public class LoginViewModel : ViewModelBase
+    public class RegisterViewModel : ViewModelBase
     {
-        public ICommand Register
-        {
-            get;
-        }
-
         public ICommand Confirm { get; }
-
-        public async void goToRegister()
-        {
-            await NavigationService.PushAsync(new Register());
-        }
+        public ICommand Back { get; }
 
         public async void goToMain()
         {
             try
             {
-                //TODO Requete POST sur /api/v1/login (si token expiré ?) pour récupérer un token d'accès
+                //TODO Créer le compte avec requete POST sur /api/v1/register et dans le modèle 
                 await NavigationService.PushAsync<Profile>();
+            }
+            catch (Exception ex) { 
+                Console.WriteLine(ex);
+            }
+        }
+
+        public async void goToLogin()
+        {
+            try
+            { 
+                await NavigationService.PushAsync<Login>();
             }
             catch (Exception ex)
             {
@@ -34,10 +36,10 @@ namespace TimeTracker
             }
         }
 
-        public LoginViewModel()
+        public RegisterViewModel()
         {
-            Register = new Command(goToRegister);
             Confirm = new Command(goToMain);
+            Back = new Command(goToLogin);
         }
     }
 }
