@@ -3,6 +3,35 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TimeTracker.App">
     <Application.Resources>
-
+        <ResourceDictionary>
+            <Color x:Key="Primary">#EEEEEE</Color>
+            <Color x:Key="Background">#222831</Color>
+            <Color x:Key="Subtitle">#393E46</Color>
+            <Color x:Key="Highlight">#FFD369</Color>
+            <Color x:Key="HighlightText">#222831</Color>
+            <Thickness x:Key="PageMargin">10</Thickness>
+            <x:Double x:Key="TitleFontSize">32</x:Double>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource Highlight}" />
+                <Setter Property="BarTextColor" Value="{StaticResource HighlightText}" />
+            </Style>
+            <Style Class="LabelDefaultXl" TargetType="Label">
+                <Setter Property="FontSize" Value="32" />
+                <Setter Property="TextColor" Value="{StaticResource Highlight}" />
+                <Setter Property="Padding" Value="0,10,0,5" />
+            </Style>
+            <Style Class="LabelDefaultL" TargetType="Label">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="TextColor" Value="{StaticResource Primary}" />
+            </Style>
+            <Style Class="LabelDefaultSubtitle" TargetType="Label">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="TextColor" Value="{StaticResource Subtitle}" />
+            </Style>
+            <Style Class="LabelDefaultSubtitleHighlight" TargetType="Label">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="TextColor" Value="{StaticResource Highlight}" />
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
