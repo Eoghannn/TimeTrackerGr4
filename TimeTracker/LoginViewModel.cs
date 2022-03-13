@@ -26,7 +26,7 @@ namespace TimeTracker
             try
             {
                 //TODO Requete POST sur /api/v1/login (si token expiré ?) pour récupérer un token d'accès
-                await NavigationService.PushAsync<Profile>();
+                await NavigationService.PushAsync<MainPage>();
             }
             catch (Exception ex)
             {

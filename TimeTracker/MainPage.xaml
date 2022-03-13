@@ -41,6 +41,7 @@
                         VerticalOptions="CenterAndExpand"
                         Text="> Voir le profil" 
                         HorizontalOptions="Start" 
+                        Command="{Binding GoToProfil}"
                         TextColor="{StaticResource Primary}"
                         Margin="0"
                 ></Button>

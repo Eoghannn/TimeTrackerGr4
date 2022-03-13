@@ -23,7 +23,7 @@
                 <Setter Property="HasUnevenRows" Value="True"></Setter>
                 <Setter Property="SeparatorVisibility" Value="Default"></Setter>
             </Style>
-            <Style TargetType="NavigationPage">
+            <Style TargetType="mvvm:MvvmNavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource Highlight}" />
                 <Setter Property="BarTextColor" Value="{StaticResource HighlightText}" />
             </Style>

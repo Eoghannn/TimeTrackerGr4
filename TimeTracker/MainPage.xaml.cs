@@ -14,6 +14,7 @@ using System.Windows.Input;
 using Microcharts;
 using Rg.Plugins.Popup.Extensions;
 using SkiaSharp;
+using Storm.Mvvm.Services;
 using TimeTracker.ViewModels;
 using Xamarin.Forms;
 using Task = TimeTracker.ViewModels.Task;
@@ -39,6 +40,17 @@ namespace TimeTracker
         {
             this.parent = p;
             LastTaskEmpty = "False";
+        }
+
+        public ICommand GoToProfil
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    await Application.Current.MainPage.Navigation.PushAsync(new Profile());
+                });
+            }
         }
     }
 
