@@ -11,7 +11,6 @@ namespace TimeTracker
         public static Color HighlightColor;
         public static Color DefaultColor;
 
-        public App()
         public App() : base(() => new Login())
         {
             InitializeComponent();
