@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        x:Class="TimeTracker.Templates.ListViewTemplate">
+    <SwipeView>
+        <SwipeView.RightItems>
+                <SwipeItems Mode="Reveal">
+                    <SwipeItem IconImageSource="ic_heart.png"
+                               BackgroundColor="{StaticResource Highlight}"
+                               Text="{Binding StartStopText}"
+                               Command="{Binding StartOrStopCommand}"/>
+                    <SwipeItem BackgroundColor="SeaGreen"
+                               Text="Edit"
+                               Command="{Binding ToggleEdit}"/>
+                </SwipeItems>
+            </SwipeView.RightItems>
+            <Grid Padding="0, 20,0,20 " VerticalOptions="CenterAndExpand">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackLayout Grid.Column="0" VerticalOptions="CenterAndExpand">
+                    <Ellipse Fill="{Binding Color, Converter={StaticResource ColorToSolidColorBrush}}"
+                             WidthRequest="25"
+                             HeightRequest="25"
+                             HorizontalOptions="Center" />
+                </StackLayout>
+                <StackLayout Grid.Column="1" VerticalOptions="CenterAndExpand">
+                    <Label Text="{Binding Title}"
+                           VerticalOptions="Center"
+                           IsVisible="{Binding IsEdited, Converter={StaticResource InverseBoolConverter}}"
+                           StyleClass="LabelDefaultL">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Tapped}"></TapGestureRecognizer>
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Entry x:Name="EditEntry"
+                           VerticalOptions="Center"
+                           ReturnCommand="{Binding ToggleEdit}" 
+                           Text="{Binding Title}" 
+                           IsVisible="{Binding IsEdited}"/>
+                </StackLayout>
+                <StackLayout Grid.Column="2" VerticalOptions="CenterAndExpand">
+                    <Label Text="{Binding DurationText}"
+                           StyleClass="LabelDefaultSubtitleHighlight"
+                           TextColor="{Binding DurationColor}"
+                           VerticalTextAlignment="Center"
+                           IsVisible="{Binding IsEdited, Converter={StaticResource InverseBoolConverter}}"/>
+                    <Button Text="✖"
+                            TextColor="White"
+                            BackgroundColor="Red"
+                            BorderWidth="1"
+                            BorderRadius="15"
+                            Padding="0"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            IsVisible="{Binding IsEdited}"
+                            Command="{Binding Remove}"/>
+                </StackLayout>
+            </Grid>
+        </SwipeView>
+    </ViewCell>
+   

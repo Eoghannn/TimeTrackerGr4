@@ -11,268 +11,101 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microcharts;
 using Rg.Plugins.Popup.Extensions;
+using SkiaSharp;
+using TimeTracker.ViewModels;
 using Xamarin.Forms;
+using Task = TimeTracker.ViewModels.Task;
 
 namespace TimeTracker
 {
-    public class InverseBoolConverter : IValueConverter
+
+    public class ColorList : List<Color>{}
+
+    public class MainPageViewModel : BaseViewModel
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return !((bool)value);
-        }
-    
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value;
-        }
-    }
-    public abstract class BaseViewModel : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly MainPage parent;
 
-        protected void OnPropertyChanged( 
-            [CallerMemberName] string propertyName = null )
+        private String _lastTaskEmpty;
+
+        private String LastTaskEmpty
         {
-            PropertyChanged?.Invoke( 
-                this, new PropertyChangedEventArgs( propertyName ) );
+            get => _lastTaskEmpty;
+            set => SetValue(ref _lastTaskEmpty, value);
         }
 
-        protected void SetValue<T>( ref T backingField, T value, [CallerMemberName] string propertyName = null )
+        public MainPageViewModel(MainPage p)
         {
-            if (EqualityComparer<T>.Default.Equals( 
-                    backingField, value )) return;
-            backingField = value;
-            OnPropertyChanged( propertyName );
+            this.parent = p;
+            LastTaskEmpty = "False";
         }
-    }
-
-    public class ObjWithDuration: BaseViewModel
-    {
-        
-        private DateTime _startTime;
-
-        private Color _highlightColor;
-        private Color _defaultColor;
-        private Color _actualColor;
-
-        public Color DurationColor
-        {
-            get => _actualColor;
-            set => SetValue(ref _actualColor, value);
-        }
-
-        private bool _isStarted;
-        public bool IsStarted
-        {
-            get => _isStarted;
-            set
-            {
-                if (value)
-                {
-                    DurationColor = _highlightColor;
-                    _startTime = DateTime.Now;
-                    Device.StartTimer(new TimeSpan(0, 0, 10), () =>
-                    {
-                        UpdateDurationText();
-                        return _isStarted;
-                    });
-                }
-                else
-                {
-                    DurationColor = _defaultColor;
-                    Duration = Duration.Add(DateTime.Now - _startTime);
-                }
-                StartStopText = value ? "Stop" : "Start";
-                SetValue<bool>(ref _isStarted, value);
-            }
-        }
-
-        private String _startStopText;
-        public String StartStopText
-        {
-            get => _startStopText;
-            set => SetValue<String>( ref _startStopText, value );
-        }
-        
-        private String _durationText;
-        public String DurationText
-        {
-            get => _durationText;
-            set => SetValue<String>( ref _durationText, value );
-        }
-
-        private TimeSpan _duration;
-
-        public TimeSpan Duration
-        {
-            get => _duration;
-            set
-            {
-                SetValue(ref _duration, value);
-                // TODO mettre à jour le serveur ici ( sur la durée de la task / project ) avec tempTS
-            }
-        }
-
-        public ObjWithDuration()
-        {
-            _startTime = new DateTime();
-            _isStarted = false;
-            _startStopText = "Start";
-            _duration = new TimeSpan();
-            _highlightColor = (Color) (Application.Current.Resources.ContainsKey("Highlight")
-                ? Application.Current.Resources["Highlight"]
-                : Color.Aqua);
-            _defaultColor = (Color) (Application.Current.Resources.ContainsKey("Primary")
-                ? Application.Current.Resources["Primary"]
-                : Color.White);
-            _actualColor = _defaultColor;
-            UpdateDurationText();
-        }
-
-        public void UpdateDurationText()
-        {
-            // Fonction appelée toutes les 10 secondes quand le timer est lancé 
-            Debug.WriteLine("update ");
-            TimeSpan tempTS = new TimeSpan(Duration.Days, Duration.Hours, Duration.Minutes, Duration.Seconds);
-            if (IsStarted)
-            {
-                tempTS = tempTS.Add(DateTime.Now - _startTime);
-            }
-            DurationText = (tempTS.Hours > 0 ? tempTS.Hours+"h " : "") + tempTS.Minutes + "min";
-        }
-        
-        
-        public ICommand StartOrStopCommand { get { return new Command(() => {IsStarted = !IsStarted; }); } } 
-        
-    }
-    public class Task : ObjWithDuration
-    {
-        private String _title;
-        private Project _parent;
-
-        public Task(String title, Project parent)
-        {
-            this._title = title;
-            this._parent = parent;
-        }
-    }
-
-    public class Project : ObjWithDuration
-    {
-        private static Project _inEdition; // il ne peut y avoir qu'un project en édition à la fois
-
-        public static Project inEdition
-        {
-            get => _inEdition;
-            set
-            {
-                if (value == null) MainPage.nPButton.IsEnabled = true;
-                else MainPage.nPButton.IsEnabled = false;
-                _inEdition = value;
-            }
-        }
-        private String _title;
-        public String Title
-        {
-            get => _title;
-            set => SetValue(ref _title, value);
-        }
-        private ObservableCollection<Task> _tasks;
-
-        private bool _isEdited;
-        
-        private Entry EditEntry
-        {
-            get
-            {
-                ITemplatedItemsList<Cell> cells = MainPage.PListView.TemplatedItems;
-                int index = MainPage.Projects.IndexOf(this);
-                return index==-1? null : cells?[index].FindByName<Entry>("EditEntry");
-            }
-        }
-
-        public bool IsEdited
-        {
-            get => _isEdited;
-            set
-            {
-                if (!value)
-                {
-                    if (inEdition == this)
-                    {
-                        inEdition = null;
-                    }
-                    // TODO ici l'utilisateur a potentiellement changer le titre du projet, si c'est le cas il faut l'envoyer au serveur
-                }
-                else
-                {
-                    if (inEdition != null)
-                    {
-                        inEdition.IsEdited = false;
-                    }
-                    inEdition = this;
-                    if (EditEntry != null)
-                    {
-                        Debug.WriteLine("focus");
-                        Debug.WriteLine(EditEntry.Text);
-                        EditEntry.Focus();
-                        EditEntry.Unfocused += (sender, args) => IsEdited = false ;
-                    }
-                }
-                
-                SetValue(ref _isEdited, value);
-            }
-        }
-
-        public Project(string title)
-        {
-            Title = title;
-            _tasks = new ObservableCollection<Task>();
-        }
-        
-        public TimeSpan TotalDuraction()
-        {
-            TimeSpan res = new TimeSpan();
-            res = res.Add(Duration);
-            foreach (var variable in _tasks)
-            {
-                res = res.Add(variable.Duration);
-            }
-            return res;
-        }
-        public ICommand ToggleEdit { get { return new Command(() => {IsEdited = !IsEdited; }); } }
-        public ICommand RemoveProject { get { return new Command(() =>
-        {
-            IsEdited = false;
-            MainPage.Projects.Remove(this);
-            // TODO notifier le serveur de la suppression de ce projet
-        }); } }
     }
 
     public partial class MainPage : ContentPage
     {
-
-        public static ObservableCollection<Project> Projects;
-
+        public static ObservableCollection<Project> Projects{ get; set; }
+        public static ObservableCollection<Task> lastTask { get; set; }
+        
+        public static List<Color> ColorList;
         public static ListView PListView;
         public static Button nPButton;
         public MainPage()
         {
             Projects = new ObservableCollection<Project>();
+            ColorList = new List<Color>();
+            lastTask = new ObservableCollection<Task>();
+
             InitializeComponent();
+            BindingContext = new MainPageViewModel(this);
             PListView = projectListView;
             nPButton = newProjectButton;
+            for (int i = 0; i < ProjectColor.Capacity; i++)
+            {
+                ColorList.Add(ProjectColor[i]);
+            }
+            
+            // TODO y'a plus qu'a peuplé la liste de projet avec les bons projets + leurs tâches avec add task, une task possède .TimesList, une list<Times> qui correspond au nombre de fois où cette tâche a été lancé / stoppé, à set correctement aussi vient le constructeur de Times prévu pour
             Projects.Add(new Project("Projet Xamarin"));
             Projects.Add(new Project("Devoir Outils Exploration Données"));
             Projects.Add(new Project("Projet Flutter"));
             
+            Projects[0].AddTask("Implémentation des vues");
+            RefreshLastTask();
         }
+
+        public static void RefreshLastTask()
+        {
+            lastTask.Clear();
+            Task t = Task.LastTask();
+            if (t != null)
+            {
+                lastTask.Add(t);
+            }
+        }
+        
+        public List<ChartEntry> BuildProjectEntries(SKColor textColor, int max_label_length)
+        {
+            List<ChartEntry> entries = new List<ChartEntry>();
+
+            foreach (var project in Projects)
+            {
+                ChartEntry chartEntry = new ChartEntry(project.TotalDuraction().Minutes+1); // On commence tjr à 1 
+                chartEntry.Color = SKColor.Parse(project.Color.ToHex());
+                if (project.Title.Length > max_label_length) chartEntry.Label = project.Title.Substring(0, max_label_length-3) + "...";
+                else chartEntry.Label = project.Title;
+                chartEntry.TextColor = textColor;
+                chartEntry.ValueLabelColor = textColor;
+                entries.Add(chartEntry);
+            }
+            
+            return entries;
+        }
+
 
         private async void Button_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushPopupAsync(new GraphPopUp());
+            await Navigation.PushPopupAsync(new GraphPopUp(BuildProjectEntries(SKColors.White, 20)));
         }
 
         private void New_Project(object sender, EventArgs e)

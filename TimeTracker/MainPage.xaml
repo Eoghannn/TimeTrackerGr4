@@ -2,14 +2,25 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:TimeTracker;assembly=TimeTracker"
+             xmlns:templates="clr-namespace:TimeTracker.Templates;assembly=TimeTracker"
              x:Class="TimeTracker.MainPage"
              Title="Time Tracker"
              BackgroundColor="{StaticResource Background}">
     <ContentPage.Resources>
-        <local:InverseBoolConverter x:Key="InverseBoolConverter"></local:InverseBoolConverter>
+        <local:ColorList x:Name="ProjectColor" x:Key="ProjectColorKey">
+            <Color>#8EFF38</Color>
+            <Color>#FFC430</Color>
+            <Color>#FF6A42</Color>
+            <Color>#FF4780</Color>
+            <Color>#A664FF</Color>
+            <Color>#5197FF</Color>
+            <Color>#64D6FF</Color>
+            <Color>#2AFF86</Color>
+        </local:ColorList>
     </ContentPage.Resources>
     
     <AbsoluteLayout Margin="{StaticResource PageMargin}">
+        
         <StackLayout AbsoluteLayout.LayoutFlags="SizeProportional"
                      AbsoluteLayout.LayoutBounds="0.5,0,1,1">
             <Label Text="Profil" StyleClass="LabelDefaultXl"/>
@@ -35,120 +46,45 @@
                 ></Button>
             </Grid>
             
-            <Label Text="Dernière Tâche" StyleClass="LabelDefaultXl"/>
+            <Label Text="Dernière Tâche" StyleClass="LabelDefaultXl" IsVisible="{Binding LastTaskEmpty}" />
             
-            <SwipeView VerticalOptions="CenterAndExpand">
-                <SwipeView.RightItems>
-                    <SwipeItems Mode="Reveal">
-                        <SwipeItem IconImageSource="ic_heart.png"
-                                   BackgroundColor="{StaticResource Highlight}"
-                                   Text="Your Action" />
-                    </SwipeItems>
-                </SwipeView.RightItems>
-                <Grid Padding="0, 10,0,10 " VerticalOptions="CenterAndExpand">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                    </Grid.RowDefinitions>
-                            
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <StackLayout Grid.Row="0" Grid.Column="0" VerticalOptions="CenterAndExpand">
-                        <Ellipse Fill="Red"
-                                 WidthRequest="25"
-                                 HeightRequest="25"
-                                 VerticalOptions="Center"/>
-                    </StackLayout>
-                    <StackLayout Grid.Row="0" Grid.Column="1" VerticalOptions="CenterAndExpand" >
-                        <Label Text="Projet XamarinForms"
-                               StyleClass="LabelDefaultSubtitle"/>
-                        <Label Text="Implémentation des vues"
-                               StyleClass="LabelDefaultL"/>
-                        <Label Text="ㅤ"
-                               StyleClass="LabelDefaultSubtitle"/>
-                    </StackLayout>
-                    <StackLayout Grid.Row="0" Grid.Column="2" VerticalOptions="CenterAndExpand">
-                        <Label Text="8h"
-                               StyleClass="LabelDefaultSubtitleHighlight"/>
-                    </StackLayout>
-                </Grid>
-                        
-            </SwipeView>
-            
-            <Label Text="Projets en cours" StyleClass="LabelDefaultXl"/>
-            
-            <ListView x:Name="projectListView"
-                      HasUnevenRows="True"
-                      SeparatorVisibility="Default"
-                      BackgroundColor="{StaticResource Background}"
-                      ItemsSource="{x:Static local:MainPage.Projects}">
-                <ListView.ItemTemplate><DataTemplate><ViewCell>
-                    <SwipeView>
-                        <SwipeView.RightItems>
-                            <SwipeItems Mode="Reveal">
-                                <SwipeItem IconImageSource="ic_heart.png"
-                                           BackgroundColor="{StaticResource Highlight}"
-                                           Text="{Binding StartStopText}"
-                                           Command="{Binding StartOrStopCommand}"/>
-                                <SwipeItem BackgroundColor="SeaGreen"
-                                           Text="Edit"
-                                           Command="{Binding ToggleEdit}"/>
-                            </SwipeItems>
-                        </SwipeView.RightItems>
-                        <Grid Padding="0, 20,0,20 " VerticalOptions="CenterAndExpand">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <StackLayout Grid.Column="0" VerticalOptions="CenterAndExpand">
-                                <Ellipse Fill="Red"
-                                         WidthRequest="25"
-                                         HeightRequest="25"
-                                         HorizontalOptions="Center" />
-                            </StackLayout>
-                            <StackLayout Grid.Column="1" VerticalOptions="CenterAndExpand">
-                                <Label Text="{Binding Title}"
-                                       VerticalOptions="Center"
-                                       IsVisible="{Binding IsEdited, Converter={StaticResource InverseBoolConverter}}"
-                                       StyleClass="LabelDefaultL"/>
-                                <Entry x:Name="EditEntry"
-                                       VerticalOptions="Center"
-                                       ReturnCommand="{Binding ToggleEdit}" 
-                                       Text="{Binding Title}" 
-                                       IsVisible="{Binding IsEdited}"/>
-                            </StackLayout>
-                            <StackLayout Grid.Column="2" VerticalOptions="CenterAndExpand">
-                                <Label Text="{Binding DurationText}"
-                                       StyleClass="LabelDefaultSubtitleHighlight"
-                                       TextColor="{Binding DurationColor}"
-                                       VerticalTextAlignment="Center"
-                                       IsVisible="{Binding IsEdited, Converter={StaticResource InverseBoolConverter}}"/>
-                                <Button Text="✖"
-                                        TextColor="White"
-                                        BackgroundColor="Red"
-                                        BorderWidth="1"
-                                        BorderRadius="15"
-                                        Padding="0"
-                                        WidthRequest="30"
-                                        HeightRequest="30"
-                                        IsVisible="{Binding IsEdited}"
-                                        Command="{Binding RemoveProject}"/>
-                            </StackLayout>
-                        </Grid>
-                    </SwipeView>
-                </ViewCell></DataTemplate></ListView.ItemTemplate>
+            <ListView x:Name="lastTaskListView"
+                      StyleClass="ListViewStyle"
+                      ItemsSource="{x:Static local:MainPage.lastTask}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <templates:ListViewTemplate></templates:ListViewTemplate>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
                 <ListView.Footer>
+                    
                     <StackLayout>
-                        <Button x:Name="newProjectButton" Text="Nouveau projet" Clicked="New_Project"></Button>
-                        <!--La boxview sert de marge pour que le bouton d'ajout soit visible malgré le bouton graphique-->
-                        <BoxView HorizontalOptions="CenterAndExpand" HeightRequest="100"></BoxView>  
+                        <Label Text="Projets en cours" StyleClass="LabelDefaultXl"/>
+            
+                        <ListView x:Name="projectListView"
+                                  StyleClass="ListViewStyle"
+                                  ItemsSource="{x:Static local:MainPage.Projects}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <templates:ListViewTemplate></templates:ListViewTemplate>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.Footer>
+                                <StackLayout>
+                                    <Button x:Name="newProjectButton" Text="Nouveau projet" Clicked="New_Project"></Button>
+                                    <!--La boxview sert de marge pour que le bouton d'ajout soit visible malgré le bouton graphique-->
+                                    <BoxView HorizontalOptions="CenterAndExpand" HeightRequest="100"></BoxView>  
+                                </StackLayout>
+                    
+                            </ListView.Footer>
+                        </ListView>
                     </StackLayout>
+                    
                     
                 </ListView.Footer>
             </ListView>
+            
+            
             
         </StackLayout>
         <Button AbsoluteLayout.LayoutBounds="0.5,0.95,1,0.1"
