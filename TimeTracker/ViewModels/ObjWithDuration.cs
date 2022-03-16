@@ -80,6 +80,7 @@ namespace TimeTracker.ViewModels
                 if (startedObj != null)
                 {
                     StartStopText = startedObj.IsStarted ? "Stop" : "Start";
+                    DurationColor = startedObj.IsStarted ? _highlightColor : _defaultColor;
                 }
                 if(((Project) this).Tasks != null) totalDuration = ((Project) this).TotalDuraction(); // null au démarrage car le constructeur de ObjWith duration est appelé avant 
             }

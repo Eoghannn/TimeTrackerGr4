@@ -78,17 +78,12 @@ namespace TimeTracker.ViewModels
 
         public void StartStopCommand()
         {
-            if (IsStarted)
+            if (StartedObj != null && StartedObj.IsStarted)
             {
-                if (StartedObj != null)
-                {
-                    StartedObj.IsStarted = false;
-                }
+                StartedObj.IsStarted = false;
+                return;
             }
-            else
-            {
-                OpenTaskView();
-            }
+            OpenTaskView();
         }
         public override ICommand StartOrStopCommand
         {
