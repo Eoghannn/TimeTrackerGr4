@@ -28,7 +28,10 @@
                BackgroundColor="{StaticResource Background}">
             <StackLayout>
                 <forms:ChartView x:Name="ProjectChart" HeightRequest="250" /> 
-                <Button Text="Close" Clicked="Button_Clicked"></Button>
+                <Button Text="Close" 
+                        BackgroundColor="Transparent"
+                        TextColor="{StaticResource Highlight}"
+                        Clicked="Button_Clicked"></Button>
             </StackLayout>
         </Frame>
       

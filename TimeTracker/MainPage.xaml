@@ -19,7 +19,7 @@
         </local:ColorList>
     </ContentPage.Resources>
     
-    <AbsoluteLayout Margin="{StaticResource PageMargin}">
+    <AbsoluteLayout>
         
         <StackLayout AbsoluteLayout.LayoutFlags="SizeProportional"
                      AbsoluteLayout.LayoutBounds="0.5,0,1,1">
@@ -38,6 +38,7 @@
                 </StackLayout>
                 
                 <Button Grid.Column="1" 
+                        StyleClass="DefaultButton"
                         VerticalOptions="CenterAndExpand"
                         Text="> Voir le profil" 
                         HorizontalOptions="Start" 
@@ -64,7 +65,9 @@
             
                         <ListView x:Name="projectListView"
                                   StyleClass="ListViewStyle"
-                                  ItemsSource="{x:Static local:MainPage.Projects}">
+                                  ItemsSource="{x:Static local:MainPage.Projects}"
+                                  SeparatorColor="Transparent"
+                                  RefreshControlColor="Transparent">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <templates:ListViewTemplate></templates:ListViewTemplate>
@@ -72,7 +75,10 @@
                             </ListView.ItemTemplate>
                             <ListView.Footer>
                                 <StackLayout>
-                                    <Button x:Name="newProjectButton" Text="Nouveau projet" Clicked="New_Project"></Button>
+                                    <Button x:Name="newProjectButton" 
+                                            StyleClass="DefaultButton"
+                                            Text="Nouveau projet" 
+                                            Clicked="New_Project"></Button>
                                     <!--La boxview sert de marge pour que le bouton d'ajout soit visible malgré le bouton graphique-->
                                     <BoxView HorizontalOptions="CenterAndExpand" HeightRequest="100"></BoxView>  
                                 </StackLayout>
@@ -90,14 +96,7 @@
         </StackLayout>
         <Button AbsoluteLayout.LayoutBounds="0.5,0.95,1,0.1"
                 AbsoluteLayout.LayoutFlags="All"
-                BorderColor="{StaticResource Highlight}"
-                BackgroundColor="{StaticResource Highlight}"
-                StyleClass="LabelDefaultXl"
-                TextColor="{StaticResource HighlightText}"
-                FontSize="Medium"
-                BorderRadius="20"
-                BorderWidth="2"
-                Text="Graphique"
+                StyleClass="GraphiqueButton"
                 Clicked="Button_Clicked"/>
     </AbsoluteLayout>
 

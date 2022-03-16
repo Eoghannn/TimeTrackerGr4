@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:TimeTracker="clr-namespace:TimeTracker"
              x:Class="TimeTracker.Register"
-             x:DataType="TimeTracker:RegisterViewModel">
+             x:DataType="TimeTracker:RegisterViewModel"
+             Title="Inscription">
     <ContentPage.Content>
-        <StackLayout HorizontalOptions="Center" VerticalOptions="CenterAndExpand">
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
             <Label Text="Sign up" HorizontalOptions="CenterAndExpand" FontSize="40" Padding="0,0,0,50"/>
             <Entry x:Name="Firstname" Placeholder="Firstname" WidthRequest="300"/>
             <Entry x:Name="Lastname" Placeholder="Lastname" WidthRequest="300"/>

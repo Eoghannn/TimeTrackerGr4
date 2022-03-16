@@ -3,11 +3,13 @@
 <ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
         x:Class="TimeTracker.Templates.ListViewTemplate">
-    <SwipeView>
-        <SwipeView.RightItems>
-                <SwipeItems Mode="Reveal">
-                    <SwipeItem IconImageSource="ic_heart.png"
-                               BackgroundColor="{StaticResource Highlight}"
+    <SwipeView VerticalOptions="Center"
+               BackgroundColor="Transparent">
+        <SwipeView.RightItems >
+                <SwipeItems Mode="Reveal"
+                            >
+                    <SwipeItem 
+                        BackgroundColor="{StaticResource Highlight}"
                                Text="{Binding StartStopText}"
                                Command="{Binding StartOrStopCommand}"/>
                     <SwipeItem BackgroundColor="SeaGreen"
@@ -15,7 +17,7 @@
                                Command="{Binding ToggleEdit}"/>
                 </SwipeItems>
             </SwipeView.RightItems>
-            <Grid Padding="0, 20,0,20 " VerticalOptions="CenterAndExpand">
+            <Grid Padding="0, 20,0,20 " VerticalOptions="CenterAndExpand" BackgroundColor="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -38,6 +40,7 @@
                     </Label>
                     <Entry x:Name="EditEntry"
                            VerticalOptions="Center"
+                           StyleClass="DefaultEntry"
                            ReturnCommand="{Binding ToggleEdit}" 
                            Text="{Binding Title}" 
                            IsVisible="{Binding IsEdited}"/>
@@ -51,8 +54,10 @@
                     <Button Text="✖"
                             TextColor="White"
                             BackgroundColor="Red"
+                            VerticalOptions="Center"
                             BorderWidth="1"
-                            BorderRadius="15"
+                            TextTransform="Uppercase"
+                            CornerRadius="15"
                             Padding="0"
                             WidthRequest="30"
                             HeightRequest="30"

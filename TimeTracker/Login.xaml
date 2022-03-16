@@ -6,12 +6,18 @@
              x:DataType="TimeTracker:LoginViewModel">
     
     <ContentPage.Content>
-        <StackLayout HorizontalOptions="Center" VerticalOptions="CenterAndExpand" Spacing="15">
-            <Label Text="Sign in" HorizontalOptions="CenterAndExpand" FontSize="40"/>
-            <Entry x:Name="Email" Placeholder="Email" WidthRequest="300"/>
-            <Entry x:Name="Password" Placeholder="Password" IsPassword="True" WidthRequest="300"/>
-            <Button Text="Login" Command="{Binding Confirm}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
-            <Button Text="Register" Command="{Binding Register}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Spacing="15">
+            <Label Text="Sign in" 
+                   HorizontalOptions="CenterAndExpand" 
+                   StyleClass="LabelDefaultXl"/>
+            <Entry x:Name="Email" Placeholder="Email" StyleClass="DefaultEntry" />
+            <Entry x:Name="Password" Placeholder="Password" IsPassword="True" StyleClass="DefaultEntry"/>
+            <Button Text="Login" 
+                    StyleClass="DefaultButton"
+                    Command="{Binding Confirm}" />
+            <Button Text="Register" 
+                    Command="{Binding Register}" 
+                    StyleClass="DefaultButton"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

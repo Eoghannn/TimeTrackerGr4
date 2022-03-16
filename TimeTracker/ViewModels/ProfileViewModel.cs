@@ -53,7 +53,7 @@ namespace TimeTracker
         {
             try
             {
-                await NavigationService.PushAsync<Login>();
+                await NavigationService.PopAsync();
                 //await NavigationService.PushAsync(new Login());
             }
             catch (Exception ex)

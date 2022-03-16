@@ -3,25 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:TimeTracker="clr-namespace:TimeTracker"
              x:Class="TimeTracker.Profile"
-             x:DataType="TimeTracker:ProfileViewModel">
+             x:DataType="TimeTracker:ProfileViewModel"
+             Title="Profile">
     <ContentPage.Resources>
         <ResourceDictionary>
             <TimeTracker:InvertBoolConverter x:Key="inverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout HorizontalOptions="Center" VerticalOptions="CenterAndExpand">
-            <Entry x:Name="Firstname" Text="{Binding Fname}" WidthRequest="300"/>
-            <Entry x:Name="Lastname" Text="{Binding Lname}" WidthRequest="300"/>
-            <Entry x:Name="Email" Text="{Binding Email}" WidthRequest="300"/>
-            <Button Text="Confirm infos" Command="{Binding ConfirmI}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
-            <Button Text="Change password" Command="{Binding Edit}" IsVisible="{Binding Visible, Converter={StaticResource inverter}}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
-            <Button Text="Back" Command="{Binding Edit}" IsVisible="{Binding Visible}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
-            <Entry x:Name="oldpwd" WidthRequest="300" IsVisible="{Binding Visible}"/>
-            <Entry x:Name="newpwd" WidthRequest="300" IsVisible="{Binding Visible}"/>
-            <Button Text="Confirm password" Command="{Binding ConfirmP}" IsVisible="{Binding Visible}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" >
+            <Entry x:Name="Firstname" Text="{Binding Fname}" StyleClass="DefaultEntry" Placeholder="Firstname" HorizontalOptions="Fill"/>
+            <Entry x:Name="Lastname" Text="{Binding Lname}" StyleClass="DefaultEntry" Placeholder="Lastname"/>
+            <Entry x:Name="Email" Text="{Binding Email}" StyleClass="DefaultEntry" Placeholder="Email"/>
+            <Button Text="Confirm infos" Command="{Binding ConfirmI}" StyleClass="DefaultButton"/>
+            <Button Text="Change password" Command="{Binding Edit}" IsVisible="{Binding Visible, Converter={StaticResource inverter}}" StyleClass="DefaultButton"/>
+            <Button Text="Back" Command="{Binding Edit}" IsVisible="{Binding Visible}" StyleClass="DefaultButton"/>
+            <Entry x:Name="oldpwd" WidthRequest="300" IsVisible="{Binding Visible}" Placeholder="Old Password"/>
+            <Entry x:Name="newpwd" WidthRequest="300" IsVisible="{Binding Visible}" Placeholder="New password"/>
+            <Button Text="Confirm password" Command="{Binding ConfirmP}" IsVisible="{Binding Visible}" StyleClass="DefaultButton"/>
             <StackLayout VerticalOptions="EndAndExpand" HorizontalOptions="Center">
-                <Button Text="Back to menu" Command="{Binding Back}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
+                <Button Text="Back to menu" Command="{Binding Back}" StyleClass="DefaultButton"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

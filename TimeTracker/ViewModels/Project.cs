@@ -9,6 +9,8 @@ namespace TimeTracker.ViewModels
         public class Project : ProjectTask
     {
         private ObservableCollection<Task> _tasks;
+        public Task StartedObj{ get; set; }
+
 
         public ObservableCollection<Task> Tasks
         {
@@ -45,7 +47,6 @@ namespace TimeTracker.ViewModels
         }
         public TimeSpan TotalDuraction()
         {
-            // TODO pb du cas ou plusieurs tâches ont été effectué en même temps ( est-ce qu'on affiche 2 min car on a passé 1 min sur 2 tâche ? )
             TimeSpan res = new TimeSpan();
             res = res.Add(Duration);
             foreach (var variable in _tasks)
@@ -66,16 +67,35 @@ namespace TimeTracker.ViewModels
             // TODO notifier le serveur de la suppression de ce projet
         }); } }
 
-        public override ICommand Tapped
+        public void OpenTaskView()
+        {
+            ((NavigationPage) App.Current.MainPage).PushAsync(new ProjectView(this), true); 
+        }
+
+        public override ICommand Tapped => new Command(()=>OpenTaskView());
+
+        public void StartStopCommand()
+        {
+            if (IsStarted)
+            {
+                if (StartedObj != null)
+                {
+                    StartedObj.IsStarted = false;
+                }
+            }
+            else
+            {
+                OpenTaskView();
+            }
+        }
+        public override ICommand StartOrStopCommand
         {
             get
             {
-                return new Command(async () =>
-                {
-                    await ((NavigationPage) App.Current.MainPage).PushAsync(new ProjectView(this), true);
-                });
+                return new Command(StartStopCommand);
             }
         }
+
     }
 
 }
