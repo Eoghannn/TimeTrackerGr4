@@ -13,17 +13,19 @@
             <Color x:Key="Primary">#EEEEEE</Color>
             <Color x:Key="Background">#222831</Color>
             <Color x:Key="Subtitle">#393E46</Color>
-            <Color x:Key="Highlight">#FFD369</Color>
+            <Color x:Key="Highlight">#FFD369</Color>  <!-- Ne pas oublier de modif styles.xml dans android/Recources/values !-->
             <Color x:Key="HighlightText">#222831</Color>
             <Thickness x:Key="PageMargin">10</Thickness>
             <x:Double x:Key="TitleFontSize">32</x:Double>
             <x:Double x:Key="PrimaryFontSize">20</x:Double>
             <Style Class="ListViewStyle" TargetType="ListView">
-                <Setter Property="BackgroundColor" Value="{StaticResource Background}"></Setter>
+                <Setter Property="BackgroundColor" Value="Transparent"></Setter>
                 <Setter Property="HasUnevenRows" Value="True"></Setter>
                 <Setter Property="SeparatorVisibility" Value="Default"></Setter>
             </Style>
             <Style TargetType="mvvm:MvvmNavigationPage">
+                <Setter Property="BackgroundColor" Value="{StaticResource Background}"></Setter>
+                <Setter Property="Padding" Value="{StaticResource PageMargin}"></Setter>
                 <Setter Property="BarBackgroundColor" Value="{StaticResource Highlight}" />
                 <Setter Property="BarTextColor" Value="{StaticResource HighlightText}" />
             </Style>
@@ -43,6 +45,28 @@
             <Style Class="LabelDefaultSubtitleHighlight" TargetType="Label">
                 <Setter Property="FontSize" Value="12" />
                 <Setter Property="TextColor" Value="{StaticResource Highlight}" />
+            </Style>
+            <Style Class="DefaultButton" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="TextColor" Value="{StaticResource Highlight}" />
+                <Setter Property="TextTransform" Value="None" />
+            </Style>
+            <Style Class="DefaultEntry" TargetType="Entry">
+                <Setter Property="VerticalOptions" Value="CenterAndExpand"></Setter>
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="HorizontalTextAlignment" Value="Start"></Setter>
+                <Setter Property="TextColor" Value="{StaticResource Highlight}" />
+                <Setter Property="PlaceholderColor" Value="{StaticResource Primary}" />
+            </Style>
+            <Style Class="GraphiqueButton" TargetType="Button">
+                <Setter Property="BorderColor" Value="{StaticResource Highlight}"></Setter>
+                <Setter Property="BackgroundColor" Value="{StaticResource Highlight}"></Setter>
+                <Setter Property="TextColor" Value="{StaticResource HighlightText}"></Setter>
+                <Setter Property="FontSize" Value="Medium"></Setter>
+                <Setter Property="TextTransform" Value="None"></Setter>
+                <Setter Property="Text" Value="Graphique"></Setter>
+                <Setter Property="BorderWidth" Value="2"></Setter>
+                <Setter Property="CornerRadius" Value="20"></Setter>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

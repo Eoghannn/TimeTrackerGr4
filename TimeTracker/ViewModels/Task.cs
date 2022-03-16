@@ -7,8 +7,12 @@ namespace TimeTracker.ViewModels
 {
     public class Task : ProjectTask
     {
-        private static List<Task> alltasks = new List<Task>();
+        private static List<Task> alltasks;
 
+        public static void init()
+        {
+            alltasks = new List<Task>();
+        }
         public static Task LastTask()
         {
             Task last = null;
@@ -39,6 +43,42 @@ namespace TimeTracker.ViewModels
             return last;
         }
 
+        public override Boolean IsStarted
+        {
+            get => _isStarted;
+            set
+            {
+                if (value)
+                {
+                    Task srtdObj = _parent.StartedObj;
+                    _parent.StartedObj = this;
+                    if (srtdObj != null && srtdObj != this)
+                    {
+                        srtdObj.IsStarted = false;
+                    }
+                    foreach (var VARIABLE in
+                             TimesList) // dans le doute on vérifie que tous les anciens "times" ont bien été arrété avant d'en mettre un nouveau
+                    {
+                        VARIABLE.End();
+                    }
+
+                    TimesList.Add(new Times());
+                    Device.StartTimer(new TimeSpan(0, 0, 10), () =>
+                    {
+                        UpdateDurationText();
+                        return _isStarted;
+                    });
+                }
+                else
+                {
+                    TimesList[TimesList.Count - 1].End();
+                    Duration = Duration.Add(TimesList[TimesList.Count - 1].Duration());
+                }
+                _parent.IsStarted = value;
+                SetValue<bool>(ref _isStarted, value);
+                UpdateDurationText();
+            }
+        }
 
         public Task(String title, Project parent)
         {

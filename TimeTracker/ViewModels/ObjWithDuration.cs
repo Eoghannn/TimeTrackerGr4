@@ -19,57 +19,16 @@ namespace TimeTracker.ViewModels
             set => SetValue(ref _actualColor, value);
         }
 
-        protected ObjWithDuration _parent { get; set; }
-        protected int startedItems = 0;
+        protected Project _parent { get; set; }
 
-
-        private bool _isStarted;
-        public bool IsStarted
+        protected bool _isStarted;
+        public virtual bool IsStarted
         {
             get => _isStarted;
             set
             {
-                if (value)
-                {
-                    DurationColor = _highlightColor;
-                    if (_parent != null)
-                    {
-                        _parent.startedItems += 1;
-                        if (_parent.startedItems > 0)
-                        {
-                            _parent.DurationColor = _highlightColor;
-                        }
-                    }
-                    foreach (var VARIABLE in TimesList) // dans le doute on vérifie que tous les anciens "times" ont bien été arrété avant d'en mettre un nouveau
-                    {
-                        VARIABLE.End();
-                    }
-                    TimesList.Add(new Times());
-                    Device.StartTimer(new TimeSpan(0, 0, 10), () =>
-                    {
-                        UpdateDurationText();
-                        return _isStarted;
-                    });
-                }
-                else
-                {
-                    if (_parent != null)
-                    {
-                        _parent.startedItems -= 1;
-                        if (_parent.startedItems == 0)
-                        {
-                            _parent.DurationColor = _defaultColor;
-                        }
-                    }
-                    if (startedItems == 0)
-                    {
-                        DurationColor = _defaultColor;
-                    }
-                    TimesList[TimesList.Count-1].End();
-                    Duration = Duration.Add(TimesList[TimesList.Count-1].Duration());
-                }
-                StartStopText = value ? "Stop" : "Start";
                 SetValue<bool>(ref _isStarted, value);
+                UpdateDurationText();
             }
         }
 
@@ -112,23 +71,29 @@ namespace TimeTracker.ViewModels
         {
             // Fonction appelée toutes les 10 secondes quand le timer est lancé 
             Debug.WriteLine("update ");
+            DurationColor = IsStarted ? _highlightColor : _defaultColor;
+            StartStopText = IsStarted ? "Stop" : "Start";
             TimeSpan totalDuration = Duration;
             if (this.GetType() == typeof(Project))
             {
+                ObjWithDuration startedObj = ((Project) this).StartedObj;
+                if (startedObj != null)
+                {
+                    StartStopText = startedObj.IsStarted ? "Stop" : "Start";
+                }
                 if(((Project) this).Tasks != null) totalDuration = ((Project) this).TotalDuraction(); // null au démarrage car le constructeur de ObjWith duration est appelé avant 
             }
-            TimeSpan tempTS = new TimeSpan(totalDuration.Days, totalDuration.Hours, totalDuration.Minutes, totalDuration.Seconds);
-            if (IsStarted)
+            else if (IsStarted)
             {
-                tempTS = tempTS.Add(DateTime.Now - TimesList[TimesList.Count-1].StartDate);
+                totalDuration = totalDuration.Add(DateTime.Now - TimesList[TimesList.Count-1].StartDate);
             }
-            DurationText = (tempTS.Hours > 0 ? tempTS.Hours+"h " : "") + tempTS.Minutes + "min";
+            DurationText = (totalDuration.Hours > 0 ? totalDuration.Hours+"h " : "") + totalDuration.Minutes + "min";
             if (_parent != null)
             {
                 _parent.UpdateDurationText();
             }
         }
-        public ICommand StartOrStopCommand { get { return new Command(() => {IsStarted = !IsStarted; }); } } 
+        public virtual ICommand StartOrStopCommand { get { return new Command(() => {IsStarted = !IsStarted; }); } } 
         
     }
 }

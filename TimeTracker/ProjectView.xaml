@@ -7,7 +7,7 @@
              BackgroundColor="{StaticResource Background}"
              Title="{Binding Title}">
     <ContentPage.Content>
-        <AbsoluteLayout Margin="{StaticResource PageMargin}">
+        <AbsoluteLayout>
             <StackLayout AbsoluteLayout.LayoutFlags="SizeProportional"
                          AbsoluteLayout.LayoutBounds="0.5,0,1,1">
                 <Label Text="Tâches" StyleClass="LabelDefaultXl"/>
@@ -21,7 +21,10 @@
                     </ListView.ItemTemplate>
                     <ListView.Footer>
                         <StackLayout>
-                            <Button x:Name="newTaskButton" Text="Nouvelle tâche" Command="{Binding NewTask}"></Button>
+                            <Button x:Name="newTaskButton" 
+                                    Text="Nouvelle tâche" 
+                                    Command="{Binding NewTask}"
+                                    StyleClass="DefaultButton"></Button>
                             <!--La boxview sert de marge pour que le bouton d'ajout soit visible malgré le bouton graphique-->
                             <BoxView HorizontalOptions="CenterAndExpand" HeightRequest="100"></BoxView>  
                         </StackLayout>
@@ -31,14 +34,7 @@
             
             <Button AbsoluteLayout.LayoutBounds="0.5,0.95,1,0.1"
                     AbsoluteLayout.LayoutFlags="All"
-                    BorderColor="{StaticResource Highlight}"
-                    BackgroundColor="{StaticResource Highlight}"
-                    StyleClass="LabelDefaultXl"
-                    TextColor="{StaticResource HighlightText}"
-                    FontSize="Medium"
-                    BorderRadius="20"
-                    BorderWidth="2"
-                    Text="Graphique"
+                    StyleClass="GraphiqueButton"
                     Command="{Binding ShowGraph}"/>
         </AbsoluteLayout>
     </ContentPage.Content>

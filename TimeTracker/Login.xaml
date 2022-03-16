@@ -8,9 +8,9 @@
     
     <ContentPage.Content>
         <StackLayout HorizontalOptions="Center" VerticalOptions="CenterAndExpand" Spacing="15">
-            <Label Text="Sign in" HorizontalOptions="CenterAndExpand" FontSize="40" StyleClass="LabelDefaultXl"/>
-            <Entry x:Name="Email" Placeholder="Email" WidthRequest="300" TextColor="AntiqueWhite" PlaceholderColor="Gray"/>
-            <Entry x:Name="Password" Placeholder="Password" IsPassword="True" WidthRequest="300" TextColor="AntiqueWhite" PlaceholderColor="Gray"/>
+            <Label Text="Sign in" HorizontalOptions="CenterAndExpand" FontSize="40"/>
+            <Entry x:Name="Email" Placeholder="Email" WidthRequest="300"/>
+            <Entry x:Name="Password" Placeholder="Password" IsPassword="True" WidthRequest="300"/>
             <Button Text="Login" Command="{Binding Confirm}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
             <Button Text="Register" Command="{Binding Register}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
         </StackLayout>

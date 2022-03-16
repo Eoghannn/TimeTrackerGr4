@@ -67,7 +67,6 @@ namespace TimeTracker
             Projects = new ObservableCollection<Project>();
             ColorList = new List<Color>();
             lastTask = new ObservableCollection<Task>();
-
             InitializeComponent();
             BindingContext = new MainPageViewModel(this);
             PListView = projectListView;
@@ -77,15 +76,19 @@ namespace TimeTracker
                 ColorList.Add(ProjectColor[i]);
             }
             
+            PopulateData();
+        }
+
+        public static void PopulateData()
+        {
             // TODO y'a plus qu'a peuplé la liste de projet avec les bons projets + leurs tâches avec add task, une task possède .TimesList, une list<Times> qui correspond au nombre de fois où cette tâche a été lancé / stoppé, à set correctement aussi vient le constructeur de Times prévu pour
             Projects.Add(new Project("Projet Xamarin"));
             Projects.Add(new Project("Devoir Outils Exploration Données"));
             Projects.Add(new Project("Projet Flutter"));
-            
+            Task.init(); // important
             Projects[0].AddTask("Implémentation des vues");
             RefreshLastTask();
         }
-
         public static void RefreshLastTask()
         {
             lastTask.Clear();
