@@ -45,7 +45,6 @@ namespace TimeTracker.ViewModels
                     inEdition = this;
                     if (EditEntry != null)
                     {
-                        
                         EditEntry.Focus();
                         EditEntry.Unfocused += (sender, args) => IsEdited = false ;
                     }

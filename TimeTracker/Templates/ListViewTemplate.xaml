@@ -52,10 +52,11 @@
                            VerticalTextAlignment="Center"
                            IsVisible="{Binding IsEdited, Converter={StaticResource InverseBoolConverter}}"/>
                     <Button Text="✖"
-                            TextColor="White"
-                            BackgroundColor="Red"
+                            TextColor="Red"
+                            BackgroundColor="Transparent"
                             VerticalOptions="Center"
                             BorderWidth="1"
+                            BorderColor="Transparent"
                             TextTransform="Uppercase"
                             CornerRadius="15"
                             Padding="0"

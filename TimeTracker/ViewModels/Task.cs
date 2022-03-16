@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -8,6 +9,15 @@ namespace TimeTracker.ViewModels
     public class Task : ProjectTask
     {
         private static List<Task> alltasks;
+
+        public static void RemoveAll(Collection<Task> tasks)
+        {
+            foreach (var task in tasks)
+            {
+                alltasks.Remove(task);
+            }
+            MainPage.RefreshLastTask();
+        }
 
         public static void init()
         {
@@ -48,9 +58,9 @@ namespace TimeTracker.ViewModels
             get => _isStarted;
             set
             {
+                Task srtdObj = _parent.StartedObj;
                 if (value)
                 {
-                    Task srtdObj = _parent.StartedObj;
                     _parent.StartedObj = this;
                     if (srtdObj != null && srtdObj != this)
                     {
@@ -74,7 +84,7 @@ namespace TimeTracker.ViewModels
                     TimesList[TimesList.Count - 1].End();
                     Duration = Duration.Add(TimesList[TimesList.Count - 1].Duration());
                 }
-                _parent.IsStarted = value;
+                _parent.IsStarted =  _parent.StartedObj?.IsStarted ?? false;
                 SetValue<bool>(ref _isStarted, value);
                 UpdateDurationText();
             }
@@ -93,6 +103,7 @@ namespace TimeTracker.ViewModels
         public override ICommand Remove{ get { return new Command(() =>
         {
             IsEdited = false;
+            IsStarted = false;
             ((Project)_parent).Tasks.Remove(this);
             // TODO notifier le serveur de la suppression de cette task
         }); } }
@@ -102,9 +113,14 @@ namespace TimeTracker.ViewModels
             // propriété surchargée pour permettre à l'editable object de connaitre l'entry sur laquel set le focus lors d'un changement d'état ( éditable à non éditable )
             get
             {
+                if (ProjectView.currentTaskListView == null)
+                {
+                    // last task
+                    return MainPage.LTListView.TemplatedItems[0].FindByName<Entry>("EditEntry");
+                }
                 ITemplatedItemsList<Cell> cells = ProjectView.currentTaskListView.TemplatedItems;
                 int index = ((Project)_parent).Tasks.IndexOf(this);
-                return index==-1? null : cells?[index].FindByName<Entry>("EditEntry");
+                return index==-1? new Entry() : cells?[index].FindByName<Entry>("EditEntry");
             }
         }
     }

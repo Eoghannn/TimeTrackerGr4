@@ -21,11 +21,11 @@ namespace TimeTracker.ViewModels
         }
         public virtual ICommand Remove{ get { return new Command(() =>
         {
-            return;
+            
         }); } }
         public virtual ICommand Tapped{ get { return new Command(() =>
         {
-            return;
+            
         }); } }
     }
 }

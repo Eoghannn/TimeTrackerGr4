@@ -65,9 +65,7 @@
             
                         <ListView x:Name="projectListView"
                                   StyleClass="ListViewStyle"
-                                  ItemsSource="{x:Static local:MainPage.Projects}"
-                                  SeparatorColor="Transparent"
-                                  RefreshControlColor="Transparent">
+                                  ItemsSource="{x:Static local:MainPage.Projects}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <templates:ListViewTemplate></templates:ListViewTemplate>
