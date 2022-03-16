@@ -63,6 +63,8 @@ namespace TimeTracker.ViewModels
         public override ICommand Remove{ get { return new Command(() =>
         {
             IsEdited = false;
+            //IsStarted = false;
+            Task.RemoveAll(this.Tasks);
             MainPage.Projects.Remove(this);
             // TODO notifier le serveur de la suppression de ce projet
         }); } }
@@ -76,17 +78,12 @@ namespace TimeTracker.ViewModels
 
         public void StartStopCommand()
         {
-            if (IsStarted)
+            if (StartedObj != null && StartedObj.IsStarted)
             {
-                if (StartedObj != null)
-                {
-                    StartedObj.IsStarted = false;
-                }
+                StartedObj.IsStarted = false;
+                return;
             }
-            else
-            {
-                OpenTaskView();
-            }
+            OpenTaskView();
         }
         public override ICommand StartOrStopCommand
         {

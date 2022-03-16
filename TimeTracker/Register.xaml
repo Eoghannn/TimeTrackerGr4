@@ -4,7 +4,8 @@
              xmlns:TimeTracker="clr-namespace:TimeTracker"
              x:Class="TimeTracker.Register"
              x:DataType="TimeTracker:RegisterViewModel"
-             Title="Inscription">
+             Title="Inscription"
+             BackgroundColor="Transparent">
     <ContentPage.Content>
         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
             <Label Text="Sign up" HorizontalOptions="CenterAndExpand" StyleClass="LabelDefaultXl"/>

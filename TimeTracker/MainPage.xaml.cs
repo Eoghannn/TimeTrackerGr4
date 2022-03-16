@@ -62,6 +62,8 @@ namespace TimeTracker
         public static List<Color> ColorList;
         public static ListView PListView;
         public static Button nPButton;
+        public static ListView LTListView;
+
         public MainPage()
         {
             Projects = new ObservableCollection<Project>();
@@ -70,6 +72,7 @@ namespace TimeTracker
             InitializeComponent();
             BindingContext = new MainPageViewModel(this);
             PListView = projectListView;
+            LTListView = lastTaskListView;
             nPButton = newProjectButton;
             for (int i = 0; i < ProjectColor.Capacity; i++)
             {
@@ -85,9 +88,14 @@ namespace TimeTracker
             Projects.Add(new Project("Projet Xamarin"));
             Projects.Add(new Project("Devoir Outils Exploration Données"));
             Projects.Add(new Project("Projet Flutter"));
+            Project p = new Project("dazda");
+            Projects.Add(p);
+            Debug.WriteLine(Projects.Count);
             Task.init(); // important
             Projects[0].AddTask("Implémentation des vues");
             RefreshLastTask();
+            Projects.Remove(p);
+            Debug.WriteLine(Projects.Count);
         }
         public static void RefreshLastTask()
         {
