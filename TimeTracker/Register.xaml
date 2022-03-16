@@ -3,14 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:TimeTracker="clr-namespace:TimeTracker"
              x:Class="TimeTracker.Register"
-             x:DataType="TimeTracker:RegisterViewModel">
+             x:DataType="TimeTracker:RegisterViewModel"
+             BackgroundColor="{StaticResource Background}">
     <ContentPage.Content>
         <StackLayout HorizontalOptions="Center" VerticalOptions="CenterAndExpand">
-            <Label Text="Sign up" HorizontalOptions="CenterAndExpand" FontSize="40" Padding="0,0,0,50"/>
-            <Entry x:Name="Firstname" Placeholder="Firstname" WidthRequest="300"/>
-            <Entry x:Name="Lastname" Placeholder="Lastname" WidthRequest="300"/>
-            <Entry x:Name="Email" Placeholder="Email" WidthRequest="300"/>
-            <Entry x:Name="Password" Placeholder="Password" IsPassword="True" WidthRequest="300"/>
+            <Label Text="Sign up" HorizontalOptions="CenterAndExpand" FontSize="40" StyleClass="LabelDefaultXl"/>
+            <Entry x:Name="Firstname" Placeholder="Firstname" WidthRequest="300" TextColor="AntiqueWhite" PlaceholderColor="Gray"/>
+            <Entry x:Name="Lastname" Placeholder="Lastname" WidthRequest="300" TextColor="AntiqueWhite" PlaceholderColor="Gray"/>
+            <Entry x:Name="Email" Placeholder="Email" WidthRequest="300" TextColor="AntiqueWhite" PlaceholderColor="Gray"/>
+            <Entry x:Name="Password" Placeholder="Password" IsPassword="True" WidthRequest="300" TextColor="AntiqueWhite" PlaceholderColor="Gray"/>
             <Button Text="Confirm" Command="{Binding Confirm}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
             <Button Text="Back to login" Command="{Binding Back}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
         </StackLayout>

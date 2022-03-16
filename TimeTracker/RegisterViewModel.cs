@@ -17,7 +17,7 @@ namespace TimeTracker
             try
             {
                 //TODO Créer le compte avec requete POST sur /api/v1/register et dans le modèle 
-                await NavigationService.PushAsync<Profile>();
+                await NavigationService.PushAsync<MainPage>();
             }
             catch (Exception ex) { 
                 Console.WriteLine(ex);

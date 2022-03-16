@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:TimeTracker="clr-namespace:TimeTracker"
              x:Class="TimeTracker.Profile"
-             x:DataType="TimeTracker:ProfileViewModel">
+             x:DataType="TimeTracker:ProfileViewModel"
+             BackgroundColor="{StaticResource Background}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <TimeTracker:InvertBoolConverter x:Key="inverter" />
@@ -11,14 +12,15 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout HorizontalOptions="Center" VerticalOptions="CenterAndExpand">
-            <Entry x:Name="Firstname" Text="{Binding Fname}" WidthRequest="300"/>
-            <Entry x:Name="Lastname" Text="{Binding Lname}" WidthRequest="300"/>
-            <Entry x:Name="Email" Text="{Binding Email}" WidthRequest="300"/>
+            <Label Text="Edit profile" StyleClass="LabelDefaultXl" HorizontalOptions="CenterAndExpand"/>
+            <Entry x:Name="Firstname" Text="{Binding Fname}" WidthRequest="300" TextColor="AntiqueWhite"/>
+            <Entry x:Name="Lastname" Text="{Binding Lname}" WidthRequest="300" TextColor="AntiqueWhite"/>
+            <Entry x:Name="Email" Text="{Binding Email}" WidthRequest="300" TextColor="AntiqueWhite"/>
             <Button Text="Confirm infos" Command="{Binding ConfirmI}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
             <Button Text="Change password" Command="{Binding Edit}" IsVisible="{Binding Visible, Converter={StaticResource inverter}}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
             <Button Text="Back" Command="{Binding Edit}" IsVisible="{Binding Visible}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
-            <Entry x:Name="oldpwd" WidthRequest="300" IsVisible="{Binding Visible}"/>
-            <Entry x:Name="newpwd" WidthRequest="300" IsVisible="{Binding Visible}"/>
+            <Entry x:Name="oldpwd" WidthRequest="300" IsVisible="{Binding Visible}" Placeholder="Old password" TextColor="AntiqueWhite" PlaceholderColor="Gray"/>
+            <Entry x:Name="newpwd" WidthRequest="300" IsVisible="{Binding Visible}" Placeholder="New password" TextColor="AntiqueWhite" PlaceholderColor="Gray"/>
             <Button Text="Confirm password" Command="{Binding ConfirmP}" IsVisible="{Binding Visible}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
             <StackLayout VerticalOptions="EndAndExpand" HorizontalOptions="Center">
                 <Button Text="Back to menu" Command="{Binding Back}" HorizontalOptions="CenterAndExpand" WidthRequest="200"/>
