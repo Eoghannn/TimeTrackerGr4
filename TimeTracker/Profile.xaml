@@ -4,7 +4,8 @@
              xmlns:TimeTracker="clr-namespace:TimeTracker"
              x:Class="TimeTracker.Profile"
              x:DataType="TimeTracker:ProfileViewModel"
-             Title="Profile">
+             Title="Profile"
+             BackgroundColor="Transparent">
     <ContentPage.Resources>
         <ResourceDictionary>
             <TimeTracker:InvertBoolConverter x:Key="inverter" />
