@@ -1,26 +1,27 @@
-
+using System;
+using System.Diagnostics;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace TimeTracker.ViewModels
+namespace TimeTracker.ViewModels.ListViewItems
 {
     public abstract class EditableObject : BaseViewModel
     {
-        private static EditableObject _inEdition; // il ne peut y avoir qu'un project en édition à la fois
-        public static EditableObject inEdition
-        {
-            get => _inEdition;
-            set
-            {
-                if (value == null) MainPage.nPButton.IsEnabled = true;
-                else MainPage.nPButton.IsEnabled = false;
-                _inEdition = value;
-            }
-        }
+        private MainPageViewModel _mainPageViewModel;
         
         private bool _isEdited;
 
-        public virtual Entry EditEntry { get; set; }
+        protected EditableObject(MainPageViewModel mainPageViewModel)
+        {
+            _mainPageViewModel = mainPageViewModel;
+        }
+
+        private Entry _editEntry;
+        public Entry EditEntry
+        {
+            get => _editEntry;
+            set => SetValue(ref _editEntry, value);
+        }
         // à surcharger par les classes qui l'implem pour set le focus sur l'entry qui correspond 
 
         public bool IsEdited
@@ -30,23 +31,27 @@ namespace TimeTracker.ViewModels
             {
                 if (!value)
                 {
-                    if (inEdition == this)
+                    if (_mainPageViewModel.InEdition == this)
                     {
-                        inEdition = null;
+                        _mainPageViewModel.InEdition = null;
                     }
                     // TODO ici l'utilisateur a potentiellement changer le titre du projet, si c'est le cas il faut l'envoyer au serveur
                 }
                 else
                 {
-                    if (inEdition != null)
+                    if (_mainPageViewModel.InEdition != null)
                     {
-                        inEdition.IsEdited = false;
+                        _mainPageViewModel.InEdition.IsEdited = false;
                     }
-                    inEdition = this;
+                    _mainPageViewModel.InEdition = this;
                     if (EditEntry != null)
                     {
                         EditEntry.Focus();
                         EditEntry.Unfocused += (sender, args) => IsEdited = false ;
+                    }
+                    else
+                    {
+                        Debug.WriteLine(this + " n'a pas de Edit Entry");
                     }
                 }
                 

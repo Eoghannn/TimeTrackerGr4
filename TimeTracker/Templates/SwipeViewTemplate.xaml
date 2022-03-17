@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SwipeView xmlns="http://xamarin.com/schemas/2014/forms"
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+           x:Class="TimeTracker.Templates.SwipeViewTemplate"
+           xmlns:viewModels="clr-namespace:TimeTracker.ViewModels.ListViewItems;assembly=TimeTracker"
+           x:DataType="viewModels:ProjectTask"
+           VerticalOptions="CenterAndExpand"
+           BackgroundColor="Transparent">
+<SwipeView.RightItems >
+    <SwipeItems Mode="Reveal"
+                >
+        <SwipeItem 
+            BackgroundColor="{StaticResource Highlight}"
+                   Text="{Binding StartStopText}"
+                   Command="{Binding StartOrStopCommand}"/>
+        <SwipeItem BackgroundColor="SeaGreen"
+                   Text="Edit"
+                   Command="{Binding ToggleEdit}"/>
+    </SwipeItems>
+</SwipeView.RightItems>
+    <Grid Padding="0, 20,0,20 " VerticalOptions="CenterAndExpand" BackgroundColor="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackLayout Grid.Column="0" VerticalOptions="CenterAndExpand">
+            <Ellipse Fill="{Binding Color, Converter={StaticResource ColorToSolidColorBrush}}"
+                     WidthRequest="25"
+                     HeightRequest="25"
+                     VerticalOptions="Center"
+                     HorizontalOptions="Center" />
+        </StackLayout>
+        <StackLayout Grid.Column="1" VerticalOptions="CenterAndExpand">
+            <Entry x:Name="EditEntry"
+                   StyleClass="DefaultEntry"
+                   VerticalOptions="Center"
+                   ReturnCommand="{Binding ToggleEdit}" 
+                   Text="{Binding Title}" 
+                   IsVisible="{Binding IsEdited}"/>
+            <Label Text="{Binding Title}"
+                   VerticalOptions="Center"
+                   IsVisible="{Binding IsEdited, Converter={StaticResource InverseBoolConverter}}"
+                   StyleClass="LabelDefaultL">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Tapped}"></TapGestureRecognizer>
+                </Label.GestureRecognizers>
+            </Label>
+            
+        </StackLayout>
+        <StackLayout Grid.Column="2" VerticalOptions="CenterAndExpand">
+            <Label Text="{Binding DurationText}"
+                   StyleClass="LabelDefaultSubtitleHighlight"
+                   TextColor="{Binding DurationColor}"
+                   VerticalTextAlignment="Center"
+                   IsVisible="{Binding IsEdited, Converter={StaticResource InverseBoolConverter}}"/>
+            <Button Text="✖"
+                    TextColor="Red"
+                    BackgroundColor="Transparent"
+                    VerticalOptions="Center"
+                    BorderWidth="1"
+                    BorderColor="Transparent"
+                    TextTransform="Uppercase"
+                    CornerRadius="15"
+                    Padding="0"
+                    WidthRequest="30"
+                    HeightRequest="30"
+                    IsVisible="{Binding IsEdited}"
+                    Command="{Binding Remove}"/>
+        </StackLayout>
+    </Grid>
+</SwipeView>
+   

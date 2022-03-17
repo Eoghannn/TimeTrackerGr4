@@ -5,7 +5,10 @@
              x:Class="TimeTracker.ProjectView"
              xmlns:templates="clr-namespace:TimeTracker.Templates;assembly=TimeTracker"
              BackgroundColor="{StaticResource Background}"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             xmlns:viewModels="clr-namespace:TimeTracker.ViewModels;assembly=TimeTracker"
+             x:DataType="viewModels:ProjectViewModel">
+    
     <ContentPage.Content>
         <AbsoluteLayout>
             <StackLayout AbsoluteLayout.LayoutFlags="SizeProportional"
@@ -16,7 +19,9 @@
                           ItemsSource="{Binding Tasks}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <templates:ListViewTemplate></templates:ListViewTemplate>
+                            <ViewCell>
+                                <templates:SwipeViewTemplate></templates:SwipeViewTemplate>
+                            </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                     <ListView.Footer>

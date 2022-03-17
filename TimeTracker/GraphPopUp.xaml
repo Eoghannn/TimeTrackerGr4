@@ -5,9 +5,9 @@
                  xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                  xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
                  xmlns:forms="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
-                 xmlns:microcharts="clr-namespace:Microcharts;assembly=Microcharts"
-
-                 x:Class="TimeTracker.GraphPopUp">
+                 xmlns:viewModels="clr-namespace:TimeTracker.ViewModels;assembly=TimeTracker"
+                 x:Class="TimeTracker.GraphPopUp"
+                 x:DataType="viewModels:GraphPopUpViewModel">
     <pages:PopupPage.Animation>
         <animations:ScaleAnimation 
             PositionIn="Bottom"
@@ -27,11 +27,11 @@
         <Frame CornerRadius="20"  HorizontalOptions="FillAndExpand" HeightRequest="300" 
                BackgroundColor="{StaticResource Background}">
             <StackLayout>
-                <forms:ChartView x:Name="ProjectChart" HeightRequest="250" /> 
+                <forms:ChartView x:Name="ProjectChart" HeightRequest="250" Chart="{Binding PieChart}"  /> 
                 <Button Text="Close" 
                         BackgroundColor="Transparent"
                         TextColor="{StaticResource Highlight}"
-                        Clicked="Button_Clicked"></Button>
+                        Command="{Binding Button_Clicked}"></Button>
             </StackLayout>
         </Frame>
       

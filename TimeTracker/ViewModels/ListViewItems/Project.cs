@@ -4,11 +4,12 @@ using System.Diagnostics;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace TimeTracker.ViewModels
+namespace TimeTracker.ViewModels.ListViewItems
 {
-        public class Project : ProjectTask
+        public sealed class Project : ProjectTask
     {
         private ObservableCollection<Task> _tasks;
+        public readonly MainPageViewModel MainPageViewModelRef;
         public Task StartedObj{ get; set; }
 
 
@@ -27,23 +28,15 @@ namespace TimeTracker.ViewModels
             Tasks.Add(t);
         }
         
-        public override Entry EditEntry
-        {
-            // propriété surchargée pour permettre à l'editable object de connaitre l'entry sur laquel set le focus lors d'un changement d'état ( éditable à non éditable )
-            get
-            {
-                ITemplatedItemsList<Cell> cells = MainPage.PListView.TemplatedItems;
-                int index = MainPage.Projects.IndexOf(this);
-                return index==-1? null : cells?[index].FindByName<Entry>("EditEntry");
-            }
-        }
         
-        public Project(string title)
+        public Project(string title, MainPageViewModel mainPageViewModelRef) : base(mainPageViewModelRef)
         {
             Title = title;
+            MainPageViewModelRef = mainPageViewModelRef;
             _tasks = new ObservableCollection<Task>();
-            if (MainPage.ColorList.Count == 0) Color = Color.White;
-            else Color = MainPage.ColorList[MainPage.Projects.Count % MainPage.ColorList.Count];
+            if (mainPageViewModelRef.ColorList.Count == 0) Color = Color.White;
+            else Color = mainPageViewModelRef.ColorList[mainPageViewModelRef.Projects.Count % mainPageViewModelRef.ColorList.Count];
+            UpdateDurationText();
         }
         public TimeSpan TotalDuraction()
         {
@@ -64,14 +57,14 @@ namespace TimeTracker.ViewModels
         {
             IsEdited = false;
             //IsStarted = false;
-            Task.RemoveAll(this.Tasks);
-            MainPage.Projects.Remove(this);
+            MainPageViewModelRef.RemoveAllTasks(this.Tasks);
+            MainPageViewModelRef.Projects.Remove(this);
             // TODO notifier le serveur de la suppression de ce projet
         }); } }
 
         public void OpenTaskView()
         {
-            ((NavigationPage) App.Current.MainPage).PushAsync(new ProjectView(this), true); 
+            ((NavigationPage) Application.Current.MainPage).PushAsync(new ProjectView(this), true); 
         }
 
         public override ICommand Tapped => new Command(()=>OpenTaskView());
@@ -91,6 +84,18 @@ namespace TimeTracker.ViewModels
             {
                 return new Command(StartStopCommand);
             }
+        }
+
+        public override void UpdateDurationText()
+        {
+            Debug.WriteLine(StartedObj?.IsStarted == true);
+            if (StartedObj != null)
+            {
+                StartStopText = StartedObj.IsStarted ? "Stop" : "Start";
+                DurationColor = StartedObj.IsStarted ? HighlightColor : DefaultColor;
+            }
+            TimeSpan totalDuration = TotalDuraction(); 
+            DurationText = (totalDuration.Hours > 0 ? totalDuration.Hours+"h " : "") + totalDuration.Minutes + "min";
         }
 
     }
