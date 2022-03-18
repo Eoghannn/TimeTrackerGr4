@@ -58,7 +58,8 @@
             <Label Text="Projets en cours" StyleClass="LabelDefaultXl"/>
             <ListView x:Name="projectListView"
                       StyleClass="ListViewStyle"
-                      ItemsSource="{Binding Projects}">
+                      ItemsSource="{Binding Projects}"
+                      CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

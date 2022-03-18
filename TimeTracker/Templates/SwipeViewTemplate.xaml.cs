@@ -19,17 +19,5 @@ namespace TimeTracker.Templates
             Debug.WriteLine(BindingContext);
         }
 
-        public new object BindingContext
-        {
-            get => base.BindingContext;
-            set
-            {
-                base.BindingContext = value;
-                if (value.GetType() == typeof(ProjectTask))
-                {
-                    ((ProjectTask) value).EditEntry = EditEntry;
-                }
-            }
-        }
     }
 }

@@ -16,7 +16,8 @@
                 <Label Text="Tâches" StyleClass="LabelDefaultXl"/>
                 <ListView x:Name="taskListView"
                           StyleClass="ListViewStyle"
-                          ItemsSource="{Binding Tasks}">
+                          ItemsSource="{Binding Tasks}"
+                          CachingStrategy="RecycleElement">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>

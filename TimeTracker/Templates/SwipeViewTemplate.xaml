@@ -41,6 +41,7 @@
                    VerticalOptions="Center"
                    ReturnCommand="{Binding ToggleEdit}" 
                    Text="{Binding Title}" 
+                   IsEnabled="{Binding IsEdited}"
                    IsVisible="{Binding IsEdited}"/>
             <Label Text="{Binding Title}"
                    VerticalOptions="Center"
