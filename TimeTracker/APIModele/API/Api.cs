@@ -5,7 +5,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using TimeTracker.API.Accounts;
+using TimeTracker.API.Authentications;
 using TimeTracker.API.Authentications.Credentials;
+using TimeTracker.APIModele;
 
 namespace TimeTracker.API
 {
@@ -26,9 +28,10 @@ namespace TimeTracker.API
             StringContent content = new StringContent(JsonConvert.SerializeObject(loginRequest), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync("/api/v1/login", content);
 
-            // this result string should be something like: "{"token":"rgh2ghgdsfds"}"
-            // var result = await response;
-            Console.WriteLine(response);
+            var result = await response.Content.ReadAsStringAsync();
+            Response<LoginResponse> test = JsonConvert.DeserializeObject<Response<LoginResponse>>(result);
+
+            Console.WriteLine(test.Data.AccessToken);
 
         }
 
@@ -50,9 +53,10 @@ namespace TimeTracker.API
             StringContent content = new StringContent(JsonConvert.SerializeObject(registerRequest), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync("/api/v1/register", content);
 
-            // this result string should be something like: "{"token":"rgh2ghgdsfds"}"
-            // var result = await response;
-            Console.WriteLine(response);
+            var result = await response.Content.ReadAsStringAsync();
+            Response<LoginResponse> test = JsonConvert.DeserializeObject<Response<LoginResponse>> (result);
+
+            Console.WriteLine(test.ErrorMessage);
         }
 
     }
