@@ -1,8 +1,8 @@
 using Newtonsoft.Json;
 
-namespace TimeTracker.API.Accounts
+namespace TimeTracker.APIModel.API.Accounts
 {
-	public class UserProfileResponse
+	public class SetUserProfileRequestTest
 	{
 		[JsonProperty("email")]
 		public string Email { get; set; }

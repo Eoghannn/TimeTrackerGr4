@@ -11,7 +11,7 @@ using TimeTracker.API.ThrowException;
 
 namespace TimeTracker.API
 {
-    public class Api
+    public class ApiTest
     {
         public async Task<Response<LoginResponse>> loginAsync(string email, string mdp)
         {
@@ -48,7 +48,7 @@ namespace TimeTracker.API
             var client = new HttpClient();
             client.BaseAddress = new Uri("https://timetracker.julienmialon.ovh/swagger/");
 
-            CreateUserRequest registerRequest = new CreateUserRequest();
+            CreateUserRequestTest registerRequest = new CreateUserRequestTest();
 
             registerRequest.ClientId = "MOBILE";
             registerRequest.ClientSecret = "COURS";
@@ -78,7 +78,7 @@ namespace TimeTracker.API
             var client = new HttpClient();
             client.BaseAddress = new Uri("https://timetracker.julienmialon.ovh/swagger/");
 
-            RefreshRequest refreshrequest = new RefreshRequest();
+            RefreshRequestTest refreshrequest = new RefreshRequestTest();
 
             refreshrequest.RefreshToken = refresh_token;
             refreshrequest.ClientId = "MOBILE";
@@ -105,7 +105,7 @@ namespace TimeTracker.API
             var client = new HttpClient();
             client.BaseAddress = new Uri("https://timetracker.julienmialon.ovh/swagger/");
 
-            SetPasswordRequest changepassword = new SetPasswordRequest();
+            SetPasswordRequestTest changepassword = new SetPasswordRequestTest();
 
             changepassword.OldPassword = old_password;
             changepassword.NewPassword = new_password;

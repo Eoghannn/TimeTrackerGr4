@@ -4,13 +4,12 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using TimeTracker.API.Accounts;
-using TimeTracker.API.Authentications;
-using TimeTracker.API.Authentications.Credentials;
-using TimeTracker.APIModele;
+using TimeTracker.APIModel.API.Accounts;
+using TimeTracker.APIModel.API.Authentications;
+using TimeTracker.APIModel.API.Authentications.Credentials;
 using TimeTracker.APIModele.API.ThrowException;
 
-namespace TimeTracker.API
+namespace TimeTracker.APIModel.API
 {
     public class Api
     {
@@ -49,7 +48,7 @@ namespace TimeTracker.API
             var client = new HttpClient();
             client.BaseAddress = new Uri("https://timetracker.julienmialon.ovh/swagger/");
 
-            CreateUserRequest registerRequest = new CreateUserRequest();
+            CreateUserRequestTest registerRequest = new CreateUserRequestTest();
 
             registerRequest.ClientId = "MOBILE";
             registerRequest.ClientSecret = "COURS";

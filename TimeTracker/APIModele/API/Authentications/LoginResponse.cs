@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace TimeTracker.API.Authentications
+namespace TimeTracker.APIModel.API.Authentications
 {
 	public class LoginResponse
 	{

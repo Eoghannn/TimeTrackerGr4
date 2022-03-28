@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace TimeTracker.API.Projects
+namespace TimeTracker.APIModel.API.Projects
 {
     public class AddTimeRequest
     {

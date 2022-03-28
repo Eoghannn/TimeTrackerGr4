@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace TimeTracker.API.Accounts
 {
-    public class CreateUserRequest
+    public class CreateUserRequestTest
     {
 	    [JsonProperty("client_id")]
 	    public string ClientId { get; set; }

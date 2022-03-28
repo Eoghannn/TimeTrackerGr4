@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using TimeTracker.API.Authentications;
-using TimeTracker.API;
-using TimeTracker.APIModele;
+
+using TimeTracker.APIModel.API;
+using TimeTracker.APIModel.API.Authentications;
 
 Api api = new Api();
 //await api.registerAsync("descamps.m91@hotmail.com","Matysse","Descamps","test1234");

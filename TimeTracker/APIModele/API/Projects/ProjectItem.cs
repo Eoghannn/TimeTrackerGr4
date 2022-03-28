@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace TimeTracker.API.Projects
+namespace TimeTracker.APIModele.API.Projects
 {
     public class ProjectItem
     {

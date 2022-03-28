@@ -1,7 +1,7 @@
 ﻿
 using Newtonsoft.Json;
 
-namespace TimeTracker.APIModele
+namespace TimeTracker.APIModel.API
 {
     public class Response<T>
     {

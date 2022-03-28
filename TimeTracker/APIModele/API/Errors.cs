@@ -1,4 +1,4 @@
-namespace TimeTracker.API    
+namespace TimeTracker.APIModel.API    
 
 {
     public class ErrorCodes
