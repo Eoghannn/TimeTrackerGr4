@@ -1,4 +1,6 @@
-﻿namespace TimeTracker.API.ThrowException
+﻿using System;
+
+namespace TimeTracker.API.ThrowException
 {
     public class WrongRefreshTokenException : Exception
     {

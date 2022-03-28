@@ -111,7 +111,7 @@ namespace TimeTracker.API
             changepassword.NewPassword = new_password;
 
             StringContent content = new StringContent(JsonConvert.SerializeObject(changepassword), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PatchAsync("/api/v1/password", content);
+            HttpResponseMessage response = await client.PostAsync("/api/v1/password", content);
 
             var result = await response.Content.ReadAsStringAsync();
             Response<string> test = JsonConvert.DeserializeObject<Response<string>>(result);

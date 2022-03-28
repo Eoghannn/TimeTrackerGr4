@@ -1,7 +1,7 @@
 namespace TimeTracker.API
 
 {
-    public class UrlsTest
+    public class Urls
     {
         private const string ROOT = "api/v1";
         
