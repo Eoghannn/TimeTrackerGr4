@@ -1,13 +1,9 @@
-﻿
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace TimeTracker.APIModel.API
+namespace TimeTracker.API
 {
-    public class Response<T>
-    {
-		[JsonProperty("data")]
-		public T Data { get; set; }
-
+	public class ResponseStandard
+	{
 		[JsonProperty("is_success")]
 		public bool IsSucess { get; set; }
 
