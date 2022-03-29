@@ -6,6 +6,7 @@ using System.Windows.Input;
 using TimeTracker.API;
 using TimeTracker.API.Authentications;
 using TimeTracker.API.ThrowException;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TimeTracker
@@ -66,7 +67,7 @@ namespace TimeTracker
                 {
                     //TODO Créer le compte avec requete POST sur /api/v1/register et dans le modèle 
                     Response<LoginResponse> test = await api.registerAsync(_email, _firstname, _lastname, _password);
-                    Console.WriteLine(test);
+                    Preferences.Set("access_token", test.Data.AccessToken);
                     await NavigationService.PushAsync<MainPage>();
                 }
                 else{

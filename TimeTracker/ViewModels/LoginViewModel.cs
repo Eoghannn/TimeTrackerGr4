@@ -55,6 +55,7 @@ namespace TimeTracker
                 //Requete POST sur /api/v1/login pour récupérer un token d'accès
                 Response<LoginResponse> test = await api.loginAsync(_email, _password);
                 Preferences.Set("access_token", test.Data.AccessToken);
+                Console.WriteLine(test.Data.AccessToken);
                 await NavigationService.PushAsync<MainPage>();
             }
             catch (UserNotFoundException ex)

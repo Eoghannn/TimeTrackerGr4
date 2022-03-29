@@ -112,17 +112,19 @@ namespace TimeTracker
             //et modifier les infos dans le modèle
             try
             {
-                Console.WriteLine("aaaaaaaaaaaaaaaaaaa");
+                Console.WriteLine("aaaaaaa");
                 Console.WriteLine(_oldP);
                 Console.WriteLine(_newP);
-                string isSucces = await _api.passwordAsync(_token, _oldP, _newP);
-                Console.WriteLine("bbbbbbbbbbbbbbbbbbbb");
-                Console.WriteLine(isSucces);
-                Console.WriteLine("cccccccccccccccccccccccc");
+                Console.WriteLine(_token);
+                ResponseStandard isSucces = await _api.passwordAsync(_token, _oldP, _newP);
+                Console.WriteLine(isSucces.ToString());
+                /*if (Error)
+                    Error = false;*/
                 showPasswordFields();
             } catch(WrongOldPasswordException e)
             {
                 Error = true;
+                Console.WriteLine(e.Message);
             }
 
         }
