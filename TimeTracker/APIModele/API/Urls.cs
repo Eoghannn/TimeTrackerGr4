@@ -3,6 +3,8 @@ namespace TimeTracker.APIModel.API
 {
     public class Urls
     {
+        public const string API = "https://timetracker.julienmialon.ovh";
+
         private const string ROOT = "api/v1";
         
         public const string USER_PROFILE = ROOT + "/me";
