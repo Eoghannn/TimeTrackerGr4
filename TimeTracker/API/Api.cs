@@ -102,7 +102,7 @@ namespace TimeTracker.API
             }
         }
 
-        public async Task<string> passwordAsync(string access_token, string old_password, string new_password)
+        public async Task<ResponseStandard> passwordAsync(string access_token, string old_password, string new_password)
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(Urls.API);
@@ -117,10 +117,11 @@ namespace TimeTracker.API
             HttpResponseMessage response = await client.PatchAsync(Urls.SET_PASSWORD, content);
 
             var result = await response.Content.ReadAsStringAsync();
+            ResponseStandard test = JsonConvert.DeserializeObject<ResponseStandard>(result);
 
-            if (response.IsSuccessStatusCode)
+            if (test.IsSucess)
             {
-                return "Succès";
+                return test;
             }
             else
             {
@@ -203,7 +204,7 @@ namespace TimeTracker.API
             }
         }
 
-        public async Task<string> deleteprojetAsync(string access_token, long id_projet)
+        public async Task<ResponseStandard> deleteprojetAsync(string access_token, long id_projet)
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(Urls.API);
@@ -212,10 +213,11 @@ namespace TimeTracker.API
             HttpResponseMessage response = await client.DeleteAsync(Urls.DELETE_PROJECT.Replace("{projectId}", id_projet.ToString()));
 
             var result = await response.Content.ReadAsStringAsync();
+            ResponseStandard test = JsonConvert.DeserializeObject<ResponseStandard>(result);
 
-            if (response.IsSuccessStatusCode)
+            if (test.IsSucess)
             {
-                return "succès";
+                return test;
             }
             else
             {
@@ -299,7 +301,7 @@ namespace TimeTracker.API
             }
         }
 
-        public async Task<string> deletetaskAsync(string access_token, long id_projet, long id_task)
+        public async Task<ResponseStandard> deletetaskAsync(string access_token, long id_projet, long id_task)
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(Urls.API);
@@ -311,10 +313,11 @@ namespace TimeTracker.API
             HttpResponseMessage response = await client.DeleteAsync(urlmodif);
 
             var result = await response.Content.ReadAsStringAsync();
+            ResponseStandard test = JsonConvert.DeserializeObject<ResponseStandard>(result);
 
-            if (response.IsSuccessStatusCode)
+            if (test.IsSucess)
             {
-                return "Succès";
+                return test;
             }
             else
             {
@@ -383,7 +386,7 @@ namespace TimeTracker.API
             }
         }
 
-        public async Task<string> deletetimetaskAsync(string access_token, long id_projet, long id_task, long id_time)
+        public async Task<ResponseStandard> deletetimetaskAsync(string access_token, long id_projet, long id_task, long id_time)
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(Urls.API);
@@ -396,10 +399,11 @@ namespace TimeTracker.API
             HttpResponseMessage response = await client.DeleteAsync(urlmodif);
 
             var result = await response.Content.ReadAsStringAsync();
+            ResponseStandard test = JsonConvert.DeserializeObject<ResponseStandard>(result);
 
-            if (response.IsSuccessStatusCode)
+            if (test.IsSucess)
             {
-                return "Succès";
+                return test;
             }
             else
             {
