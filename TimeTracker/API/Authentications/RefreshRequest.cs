@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace TimeTracker.API.Authentications
 {
-	public class RefreshRequestTest
+	public class RefreshRequest
 	{
 		[JsonProperty("refresh_token")]
 		public string RefreshToken { get; set; }

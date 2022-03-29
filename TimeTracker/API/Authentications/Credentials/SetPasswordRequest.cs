@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace TimeTracker.API.Authentications.Credentials
 {
-	public class SetPasswordRequestTest
+	public class SetPasswordRequest
 	{
 		[JsonProperty("old_password")]
 		public string OldPassword { get; set; }
