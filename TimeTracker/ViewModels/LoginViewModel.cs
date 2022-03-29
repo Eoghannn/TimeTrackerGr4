@@ -7,12 +7,13 @@ using Xamarin.Forms;
 using TimeTracker.API;
 using TimeTracker.API.Authentications;
 using TimeTracker.API.ThrowException;
+using Xamarin.Essentials;
 
 namespace TimeTracker
 {
     public class LoginViewModel : ViewModelBase
     {
-        private ApiTest api;
+        private Api api;
         private String _email;
         private String _password;
 
@@ -51,8 +52,9 @@ namespace TimeTracker
         {
             try
             {
-                //TODO Requete POST sur /api/v1/login (si token expiré ?) pour récupérer un token d'accès
+                //Requete POST sur /api/v1/login pour récupérer un token d'accès
                 Response<LoginResponse> test = await api.loginAsync(_email, _password);
+                Preferences.Set("access_token", test.Data.AccessToken);
                 await NavigationService.PushAsync<MainPage>();
             }
             catch (UserNotFoundException ex)
@@ -63,7 +65,7 @@ namespace TimeTracker
 
         public LoginViewModel()
         {
-            api = new ApiTest();
+            api = new Api();
             _error = false;
             Register = new Command(goToRegister);
             Confirm = new Command(goToMain);

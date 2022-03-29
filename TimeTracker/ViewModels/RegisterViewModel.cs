@@ -12,7 +12,7 @@ namespace TimeTracker
 {
     public class RegisterViewModel : ViewModelBase
     {
-        private ApiTest api;
+        private Api api;
         private String _firstname;
         private String _lastname;
         private String _email;
@@ -66,6 +66,7 @@ namespace TimeTracker
                 {
                     //TODO Créer le compte avec requete POST sur /api/v1/register et dans le modèle 
                     Response<LoginResponse> test = await api.registerAsync(_email, _firstname, _lastname, _password);
+                    Console.WriteLine(test);
                     await NavigationService.PushAsync<MainPage>();
                 }
                 else{
@@ -94,7 +95,7 @@ namespace TimeTracker
         public RegisterViewModel()
         {
             _error = false;
-            api = new ApiTest();
+            api = new Api();
             Confirm = new Command(goToMain);
             Back = new Command(goToLogin);
             _firstname = "";
