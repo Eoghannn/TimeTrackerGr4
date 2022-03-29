@@ -11,14 +11,15 @@
             <Label Text="Sign in" 
                    HorizontalOptions="CenterAndExpand" 
                    StyleClass="LabelDefaultXl"/>
-            <Entry x:Name="Email" Placeholder="Email" StyleClass="DefaultEntry" />
-            <Entry x:Name="Password" Placeholder="Password" IsPassword="True" StyleClass="DefaultEntry"/>
+            <Entry x:Name="Email" Placeholder="Email" StyleClass="DefaultEntry" Text="{Binding Email}"/>
+            <Entry x:Name="Password" Placeholder="Password" IsPassword="True" StyleClass="DefaultEntry" Text="{Binding Password}"/>
             <Button Text="Login" 
                     StyleClass="DefaultButton"
                     Command="{Binding Confirm}" />
             <Button Text="Register" 
                     Command="{Binding Register}" 
                     StyleClass="DefaultButton"/>
+            <Label Text="Incorrect email or password" TextColor="Red" HorizontalOptions="CenterAndExpand" IsVisible="{Binding Error}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
