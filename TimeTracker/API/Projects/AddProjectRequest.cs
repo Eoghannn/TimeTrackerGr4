@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace TimeTracker.API.Projects
 {
-    public class AddProjectRequestTest
+    public class AddProjectRequest
     {
         [JsonProperty("name")]
         public string Name { get; set; }
