@@ -13,6 +13,7 @@
             <Entry x:Name="Lastname" Placeholder="Lastname" WidthRequest="300" StyleClass="DefaultEntry" Text="{Binding Lastname}" IsTextPredictionEnabled="false"/>
             <Entry x:Name="Email" Placeholder="Email" WidthRequest="300" StyleClass="DefaultEntry" Text="{Binding Email}" IsTextPredictionEnabled="false"/>
             <Entry x:Name="Password" Placeholder="Password" IsPassword="True" WidthRequest="300" StyleClass="DefaultEntry" Text="{Binding Password}" IsTextPredictionEnabled="false"/>
+            <Entry x:Name="VPassword" Placeholder="Verify Password" IsPassword="True" WidthRequest="300" StyleClass="DefaultEntry" Text="{Binding Vpassword}" IsTextPredictionEnabled="false"/>
             <Button Text="Confirm" Command="{Binding Confirm}" HorizontalOptions="CenterAndExpand" WidthRequest="200" StyleClass="DefaultButton"/>
             <Button Text="Back to login" Command="{Binding Back}" HorizontalOptions="CenterAndExpand" WidthRequest="200" StyleClass="DefaultButton"/>
             <Label Text="{Binding TextError}" TextColor="Red" HorizontalOptions="CenterAndExpand" IsVisible="{Binding Error}"/>

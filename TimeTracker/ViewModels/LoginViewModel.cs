@@ -14,7 +14,6 @@ namespace TimeTracker
 {
     public class LoginViewModel : ViewModelBase
     {
-        private Api api;
         private String _email;
         private String _password;
 
