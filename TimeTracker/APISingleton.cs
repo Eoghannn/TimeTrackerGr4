@@ -16,9 +16,17 @@ public class ApiSingleton
 
     public string access_token // readonly
     {
-        get => _access_token;
+        get
+        {
+            if (isExpired())
+            {
+                refreshToken();
+            }
+
+            return _access_token;
+        }
     }
-    
+
     private string refresh_token;
     private int expires_in;
     private DateTime created_at;
@@ -36,7 +44,7 @@ public class ApiSingleton
 
     public bool isExpired()
     {
-        return created_at.Add(TimeSpan.FromSeconds(expires_in)) < DateTime.Now;
+        return created_at.Add(TimeSpan.FromSeconds(expires_in)) > DateTime.Now;
     }
 
     public void logout()
@@ -50,11 +58,6 @@ public class ApiSingleton
 
     public async Task<bool> refreshToken()
     {
-        if (isExpired())
-        {
-            return false;
-        }
-
         Response<LoginResponse> response = await Api.refreshAsync(refresh_token);
         if (response.IsSucess)
         {
