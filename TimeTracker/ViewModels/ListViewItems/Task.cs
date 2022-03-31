@@ -125,6 +125,10 @@ namespace TimeTracker.ViewModels.ListViewItems
             IsEdited = false;
             IsStarted = false;
             Project.Tasks.Remove(this);
+            if (Project.MainPageViewModelRef.LastTask == this)
+            {
+                Project.MainPageViewModelRef.LastTask = null;
+            }
             await ApiSingleton.Instance.Api.deletetaskAsync(ApiSingleton.Instance.access_token, Project.projectId, taskId);
         }); } }
 
