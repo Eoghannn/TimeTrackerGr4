@@ -1,7 +1,6 @@
 ﻿using Storm.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
 using TimeTracker.API;
@@ -14,11 +13,11 @@ namespace TimeTracker
 {
     public class RegisterViewModel : ViewModelBase
     {
+        private Api api;
         private String _firstname;
         private String _lastname;
         private String _email;
         private String _password;
-        private String _vpassword;
 
         public String Firstname
         {
@@ -39,11 +38,6 @@ namespace TimeTracker
         {
             get { return _password; }
             set { SetProperty(ref _password, value); }
-        }
-        public String Vpassword
-        {
-            get { return _vpassword; }
-            set { SetProperty(ref _vpassword, value); }
         }
 
         public ICommand Confirm { get; }
@@ -69,27 +63,12 @@ namespace TimeTracker
         {
             try
             {
-                if (_firstname.Length > 0 && _lastname.Length>0 && _email.Length>0 && _password.Length>0 && _vpassword.Length > 0)
+                if (_firstname.Length > 0 && _lastname.Length>0 && _email.Length>0 && _password.Length>0)
                 {
-                    if (_password.Equals(_vpassword))
-                    {
-                        //TODO Créer le compte avec requete POST sur /api/v1/register  
-                        Response<LoginResponse> test = await ApiSingleton.Instance.Api.registerAsync(_email, _firstname, _lastname, _password);
-                        if (test.IsSucess)
-                        {
-                            ApiSingleton.Instance.login(test.Data);
-                        }
-                        else
-                        {
-                            Debug.WriteLine(test);
-                        }
-                        await NavigationService.PushAsync<MainPage>();
-                    }
-                    else
-                    {
-                        TextError = "The passwords are different";
-                        Error = true;
-                    }
+                    //TODO Créer le compte avec requete POST sur /api/v1/register et dans le modèle 
+                    Response<LoginResponse> test = await api.registerAsync(_email, _firstname, _lastname, _password);
+                    Preferences.Set("access_token", test.Data.AccessToken);
+                    await NavigationService.PushAsync<MainPage>();
                 }
                 else{
                     TextError = "All fields must be completed";
@@ -117,13 +96,13 @@ namespace TimeTracker
         public RegisterViewModel()
         {
             _error = false;
+            api = new Api();
             Confirm = new Command(goToMain);
             Back = new Command(goToLogin);
             _firstname = "";
             _lastname = "";
             _email = "";
             _password = "";
-            _vpassword = "";
         }
     }
 }
