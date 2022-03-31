@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Microcharts;
 using Rg.Plugins.Popup.Extensions;
 using SkiaSharp;
+using Storm.Mvvm;
 using TimeTracker.API;
 using TimeTracker.API.Projects;
 using TimeTracker.ViewModels.ListViewItems;
@@ -12,7 +13,7 @@ using Xamarin.Forms;
 
 namespace TimeTracker.ViewModels
 {
-    public class ProjectViewModel : BaseViewModel
+    public class ProjectViewModel : ViewModelBase
     {
         private String _title;
         private readonly ProjectView parent;
@@ -21,13 +22,13 @@ namespace TimeTracker.ViewModels
         public ObservableCollection<Task> Tasks
         {
             get => _tasks;
-            set => SetValue(ref _tasks, value);
+            set => SetProperty(ref _tasks, value);
         }
 
         public String Title
         {
             get => _title;
-            set => SetValue(ref _title, value);
+            set => SetProperty(ref _title, value);
         }
 
         public ProjectViewModel(ProjectView p)

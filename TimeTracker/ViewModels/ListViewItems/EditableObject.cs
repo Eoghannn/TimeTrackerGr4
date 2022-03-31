@@ -1,11 +1,12 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Input;
+using Storm.Mvvm;
 using Xamarin.Forms;
 
 namespace TimeTracker.ViewModels.ListViewItems
 {
-    public abstract class EditableObject : BaseViewModel
+    public abstract class EditableObject : ViewModelBase
     {
         private MainPageViewModel _mainPageViewModel;
         
@@ -20,7 +21,7 @@ namespace TimeTracker.ViewModels.ListViewItems
         public Entry EditEntry
         {
             get => _editEntry;
-            set => SetValue(ref _editEntry, value);
+            set => SetProperty(ref _editEntry, value);
         }
         // à surcharger par les classes qui l'implem pour set le focus sur l'entry qui correspond 
 
@@ -54,7 +55,7 @@ namespace TimeTracker.ViewModels.ListViewItems
                     }
                 }
                 
-                SetValue(ref _isEdited, value);
+                SetProperty(ref _isEdited, value);
             }
         }
 

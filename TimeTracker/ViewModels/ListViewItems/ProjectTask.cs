@@ -14,7 +14,7 @@ namespace TimeTracker.ViewModels.ListViewItems
         public Color DurationColor
         {
             get => ActualColor;
-            set => SetValue(ref ActualColor, value);
+            set => SetProperty(ref ActualColor, value);
         }
         
         private bool _isStarted;
@@ -23,7 +23,7 @@ namespace TimeTracker.ViewModels.ListViewItems
             get => _isStarted;
             set
             {
-                SetValue<bool>(ref _isStarted, value);
+                SetProperty<bool>(ref _isStarted, value);
                 UpdateDurationText();
             }
         }
@@ -32,14 +32,14 @@ namespace TimeTracker.ViewModels.ListViewItems
         public String StartStopText
         {
             get => _startStopText;
-            set => SetValue<String>( ref _startStopText, value );
+            set => SetProperty<String>( ref _startStopText, value );
         }
         
         private String _durationText;
         public String DurationText
         {
             get => _durationText;
-            set => SetValue<String>( ref _durationText, value );
+            set => SetProperty<String>( ref _durationText, value );
         }
 
         private TimeSpan _duration;
@@ -48,7 +48,7 @@ namespace TimeTracker.ViewModels.ListViewItems
             get => _duration;
             set
             {
-                SetValue(ref _duration, value);
+                SetProperty(ref _duration, value);
             }
         }
         
@@ -56,14 +56,14 @@ namespace TimeTracker.ViewModels.ListViewItems
         public String Title
         {
             get => _title;
-            set => SetValue(ref _title, value);
+            set => SetProperty(ref _title, value);
         }
         
         private Color _color;
         public Color Color
         {
             get => _color;
-            set => SetValue(ref _color, value);
+            set => SetProperty(ref _color, value);
         }
 
         

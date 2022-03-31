@@ -5,12 +5,13 @@ using Microcharts;
 using Microcharts.Forms;
 using Rg.Plugins.Popup.Extensions;
 using SkiaSharp;
+using Storm.Mvvm;
 using TimeTracker.ViewModels;
 using Xamarin.Forms;
 
 namespace TimeTracker.ViewModels
 {
-    public class GraphPopUpViewModel : BaseViewModel
+    public class GraphPopUpViewModel : ViewModelBase
     {
         private readonly Color _backgroundColor;
         private readonly Double _titleFontSize;
@@ -19,7 +20,7 @@ namespace TimeTracker.ViewModels
         public PieChart PieChart
         {
             get => _pieChart;
-            set => SetValue(ref _pieChart, value);
+            set => SetProperty(ref _pieChart, value);
         }
         
         public GraphPopUpViewModel(List<ChartEntry> entries)

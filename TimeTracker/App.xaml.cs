@@ -11,7 +11,7 @@ namespace TimeTracker
         public static Color HighlightColor;
         public static Color DefaultColor;
 
-        public App() : base(() => new Login())
+        public App() : base(() =>new Login())
         {
             InitializeComponent();
             HighlightColor = (Color) (Application.Current.Resources.ContainsKey("Highlight")

@@ -42,7 +42,7 @@ namespace TimeTracker.ViewModels.ListViewItems
         public ObservableCollection<Task> Tasks
         {
             get => _tasks;
-            set => SetValue(ref _tasks, value);
+            set => SetProperty(ref _tasks, value);
         }
 
         private void AddTask(String title)
