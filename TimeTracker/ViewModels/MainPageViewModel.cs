@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Microcharts;
 using Rg.Plugins.Popup.Extensions;
 using SkiaSharp;
+using Storm.Mvvm;
 using TimeTracker.API;
 using TimeTracker.API.Accounts;
 using TimeTracker.API.Projects;
@@ -16,7 +17,7 @@ using Xamarin.Forms;
 
 namespace TimeTracker.ViewModels
 {
-    public class MainPageViewModel : BaseViewModel
+    public class MainPageViewModel : ViewModelBase
     {
         public void RemoveAllTasks(Collection<Task> tasks)
         {
@@ -37,7 +38,7 @@ namespace TimeTracker.ViewModels
             set
             {
                 newProjectButton.IsEnabled = value == null;
-                SetValue(ref _inEdition, value);
+                SetProperty(ref _inEdition, value);
             }
         }
         
@@ -46,7 +47,7 @@ namespace TimeTracker.ViewModels
         public ObservableCollection<Project> Projects
         {
             get => _projects;
-            set => SetValue(ref _projects, value);
+            set => SetProperty(ref _projects, value);
         } // static car il ne peut y avoir qu'une seule liste de projects / utilisateur + pour pouvoir y accéder de n'importe ou 
         
 
@@ -60,7 +61,7 @@ namespace TimeTracker.ViewModels
         public String LastTaskNotEmpty
         {
             get => _lastTaskNotEmpty;
-            set => SetValue(ref _lastTaskNotEmpty, value);
+            set => SetProperty(ref _lastTaskNotEmpty, value);
         }
 
         public MainPageViewModel(Button newProjectButton, ColorList colorList )
@@ -76,7 +77,7 @@ namespace TimeTracker.ViewModels
             PopulateData(); 
         }
 
-        public ICommand GoToProfil => new Command(async () => await Application.Current.MainPage.Navigation.PushAsync(new Profile(this)));
+        public ICommand GoToProfil => new Command(async () => await NavigationService.PushAsync(new Profile(this)));
         public ICommand ButtonClicked => new Command(async ()=> await Application.Current.MainPage.Navigation.PushPopupAsync(new GraphPopUp(BuildProjectEntries(SKColors.White, 20))));
 
         public ICommand NewProject
@@ -157,7 +158,7 @@ namespace TimeTracker.ViewModels
             set
             {
                 LastTaskNotEmpty = value == null ? "False" : "True";
-                SetValue(ref _lastTask, value);
+                SetProperty(ref _lastTask, value);
             }
         }
 
@@ -166,7 +167,7 @@ namespace TimeTracker.ViewModels
         public String nomPrenomString
         {
             get => _nomPrenomString;
-            set => SetValue(ref _nomPrenomString, value);
+            set => SetProperty(ref _nomPrenomString, value);
         }
         
         private String _emailString;
@@ -174,7 +175,7 @@ namespace TimeTracker.ViewModels
         public String EmailString
         {
             get => _emailString;
-            set => SetValue(ref _emailString, value);
+            set => SetProperty(ref _emailString, value);
         }
     }
 }

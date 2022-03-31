@@ -49,12 +49,12 @@
                         Margin="0"
                 ></Button>
             </Grid>
-            
             <Label Text="Dernière Tâche" StyleClass="LabelDefaultXl" IsVisible="{Binding LastTaskNotEmpty}" />
             <StackLayout IsVisible="{Binding LastTaskNotEmpty}">
                 <templates:SwipeViewTemplate x:Name="LastTaskSwipeView" 
                                              BindingContext="{Binding LastTask}">
                 </templates:SwipeViewTemplate>
+                
             </StackLayout>
             
             
