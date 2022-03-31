@@ -76,7 +76,7 @@ namespace TimeTracker.ViewModels
             PopulateData(); 
         }
 
-        public ICommand GoToProfil => new Command(async () => await Application.Current.MainPage.Navigation.PushAsync(new Profile()));
+        public ICommand GoToProfil => new Command(async () => await Application.Current.MainPage.Navigation.PushAsync(new Profile(this)));
         public ICommand ButtonClicked => new Command(async ()=> await Application.Current.MainPage.Navigation.PushPopupAsync(new GraphPopUp(BuildProjectEntries(SKColors.White, 20))));
 
         public ICommand NewProject

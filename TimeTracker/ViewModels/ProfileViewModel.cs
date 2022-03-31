@@ -8,6 +8,7 @@ using System.Windows.Input;
 using TimeTracker.API;
 using TimeTracker.API.Accounts;
 using TimeTracker.API.ThrowException;
+using TimeTracker.ViewModels;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -15,9 +16,7 @@ namespace TimeTracker
 {
     public class ProfileViewModel : ViewModelBase
     {
-        private Api _api;
-        private string _token;
-
+        private MainPageViewModel mpvm;
         private bool _visible = false;
         
         private string _fname;
@@ -99,7 +98,9 @@ namespace TimeTracker
             //et modifier les infos dans le modèle
             try
             {
-                Response<UserProfileResponse> modification = await _api.modifmeAsync(_token, _email, _fname, _lname);
+                Response<UserProfileResponse> modification = await ApiSingleton.Instance.Api.modifmeAsync(ApiSingleton.Instance.access_token, _email, _fname, _lname);
+                mpvm.EmailString = _email;
+                mpvm.nomPrenomString = _fname + " " + _lname;
                 goBack();
             } catch (WrongAccessTokenException ex)
             {
@@ -112,14 +113,10 @@ namespace TimeTracker
             //et modifier les infos dans le modèle
             try
             {
-                Console.WriteLine("aaaaaaa");
-                Console.WriteLine(_oldP);
-                Console.WriteLine(_newP);
-                Console.WriteLine(_token);
-                ResponseStandard isSucces = await _api.passwordAsync(_token, _oldP, _newP);
+                ResponseStandard isSucces = await ApiSingleton.Instance.Api.passwordAsync(ApiSingleton.Instance.access_token, _oldP, _newP);
                 Console.WriteLine(isSucces.ToString());
-                /*if (Error)
-                    Error = false;*/
+                if (Error)
+                    Error = false;
                 showPasswordFields();
             } catch(WrongOldPasswordException e)
             {
@@ -129,11 +126,9 @@ namespace TimeTracker
 
         }
 
-        public ProfileViewModel()
+        public ProfileViewModel(MainPageViewModel mpvm)
         {
-            _token = Preferences.Get("access_token", "error_token");
-            _api = new Api();
-
+            this.mpvm = mpvm;
             _error = false;
             Edit = new Command(showPasswordFields);
             Back = new Command(goBack);
@@ -147,7 +142,7 @@ namespace TimeTracker
         {
             try
             {
-                Response<UserProfileResponse> getInfos = await _api.getmeAsync(_token);
+                Response<UserProfileResponse> getInfos = await ApiSingleton.Instance.Api.getmeAsync(ApiSingleton.Instance.access_token);
                 Fname = getInfos.Data.FirstName;
                 Lname = getInfos.Data.LastName;
                 Email = getInfos.Data.Email;
