@@ -5,6 +5,8 @@ using System.Windows.Input;
 using Microcharts;
 using Rg.Plugins.Popup.Extensions;
 using SkiaSharp;
+using TimeTracker.API;
+using TimeTracker.API.Projects;
 using TimeTracker.ViewModels.ListViewItems;
 using Xamarin.Forms;
 
@@ -39,11 +41,16 @@ namespace TimeTracker.ViewModels
         {
             get
             {
-                return new Command(() =>
+                return new Command(async () =>
                 {
-                    Task t = new Task("Nouvelle tâche", parent.project);
+                    Response<TaskItem> response = await 
+                        ApiSingleton.Instance.Api.createtaskAsync(ApiSingleton.Instance.access_token,
+                            parent.project.projectId, "Nouvelle tâche");
+                    // TODO : vérifier erreur
+                    Task t = new Task(response.Data.Name, parent.project, response.Data.Id);
                     Tasks.Add(t);
                     t.IsEdited = true;
+                    
                 });
             }
         }

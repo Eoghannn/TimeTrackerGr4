@@ -24,7 +24,7 @@ namespace TimeTracker.ViewModels.ListViewItems
         }
         // à surcharger par les classes qui l'implem pour set le focus sur l'entry qui correspond 
 
-        public bool IsEdited
+        public virtual bool IsEdited
         {
             get => _isEdited;
             set
@@ -35,7 +35,6 @@ namespace TimeTracker.ViewModels.ListViewItems
                     {
                         _mainPageViewModel.InEdition = null;
                     }
-                    // TODO ici l'utilisateur a potentiellement changer le titre du projet, si c'est le cas il faut l'envoyer au serveur
                 }
                 else
                 {

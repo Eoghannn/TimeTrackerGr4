@@ -35,8 +35,8 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackLayout Grid.Column="0" VerticalOptions="CenterAndExpand">
-                    <Label  Text="NOM Prenom" StyleClass="LabelDefaultL"/>
-                    <Label Text="nom.prenom@mail.com" StyleClass="LabelDefaultSubtitleHighlight"/>
+                    <Label  Text="{Binding nomPrenomString}" StyleClass="LabelDefaultL"/>
+                    <Label Text="{Binding EmailString}" StyleClass="LabelDefaultSubtitleHighlight"/>
                 </StackLayout>
                 
                 <Button Grid.Column="1" 

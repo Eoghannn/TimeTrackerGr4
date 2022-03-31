@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using TimeTracker.API;
+using TimeTracker.API.Projects;
 using TimeTracker.Model;
 using Xamarin.Forms;
 
@@ -9,19 +11,61 @@ namespace TimeTracker.ViewModels.ListViewItems
 {
     public sealed class Task : ProjectTask
     {
-        public List<Times> TimesList;
-        private Project _parent { get; set; }
+        private List<Times> TimesList;
+
+        public void addTimes(Times t)
+        {
+            Duration = Duration.Add(t.Duration());
+            TimesList.Add(t);
+        }
+
+        public Times? lastTimes()
+        {
+            if (TimesList.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return TimesList[TimesList.Count - 1];
+            }
+        }
+        public Project Project { get; set; }
+        
+        public override bool IsEdited { 
+            get
+            {
+                return base.IsEdited;
+            }
+            set
+            {
+                if (!value)
+                {
+                    // le titre de la task a potentiellement été modifié : informer le serveur ici
+                    ApiSingleton.Instance.Api.modiftaskAsync(ApiSingleton.Instance.access_token, Project.projectId, taskId, Title).ContinueWith((
+                        async task =>
+                        {
+                            Response<TaskItem> response = await task;
+                            // TODO : vérifier erreur
+                        } ));
+                }
+
+                base.IsEdited = value;
+            } 
+        }
+
+        public long taskId;
         
         public Boolean IsStarted
         {
             get => base.IsStarted;
             set
             {
-                _parent.MainPageViewModelRef.LastTask = this;
-                Task srtdObj = _parent.StartedObj;
+                Project.MainPageViewModelRef.LastTask = this;
+                Task srtdObj = Project.StartedObj;
                 if (value)
                 {
-                    _parent.StartedObj = this;
+                    Project.StartedObj = this;
                     if (srtdObj != null && srtdObj != this)
                     {
                         srtdObj.IsStarted = false;
@@ -31,53 +75,68 @@ namespace TimeTracker.ViewModels.ListViewItems
                         VARIABLE.End();
                     }
 
-                    TimesList.Add(new Times());
-                    Device.StartTimer(new TimeSpan(0, 0, 10), () =>
+                    ApiSingleton.Instance.Api.settimetaskAsync(ApiSingleton.Instance.access_token, Project.projectId,
+                        taskId, DateTime.Now, DateTime.Now).ContinueWith((async task =>
                     {
-                        UpdateDurationText();
-                        return base.IsStarted;
-                    });
+                        Response<TimeItem> response = await task;
+                        // TODO : vérifier erreur
+                        Times t = new Times(this, response.Data.Id); 
+                        TimesList.Add(t);
+                        Device.StartTimer(new TimeSpan(0, 0, 10), () =>
+                        {
+                            UpdateDurationText();
+                            return base.IsStarted;
+                        });
+                    }));
+                    
+                    
                 }
                 else
                 {
-                    TimesList[TimesList.Count - 1].End();
-                    Duration = Duration.Add(TimesList[TimesList.Count - 1].Duration());
+                    if (TimesList.Count > 0)
+                    {
+                        TimesList[TimesList.Count - 1].End();
+                        Duration = Duration.Add(TimesList[TimesList.Count - 1].Duration());
+                    }
+                    
                 }
-                _parent.IsStarted =  _parent.StartedObj?.IsStarted ?? false;
+                Project.IsStarted =  Project.StartedObj?.IsStarted ?? false;
                 base.IsStarted = value;
                 UpdateDurationText();
             }
         }
 
-        public Task(String title, Project parent): base(parent.MainPageViewModelRef)
+        public Task(String title, Project project, long taskId): base(project.MainPageViewModelRef)
         {
             Title = title;
-            _parent = parent;
-            if (parent.MainPageViewModelRef.ColorList.Count == 0) Color = Color.White;
-            else Color = _parent.MainPageViewModelRef.ColorList[parent.Tasks.Count % _parent.MainPageViewModelRef.ColorList.Count];
+            Project = project;
+            this.taskId = taskId;
+            if (project.MainPageViewModelRef.ColorList.Count == 0) Color = Color.White;
+            else Color = Project.MainPageViewModelRef.ColorList[project.Tasks.Count % Project.MainPageViewModelRef.ColorList.Count];
             TimesList = new List<Times>();
-            parent.MainPageViewModelRef.LastTask = this;
+            project.MainPageViewModelRef.LastTask = this;
             UpdateDurationText();
         }
 
         public override ICommand Tapped { get; }
 
-        public override ICommand Remove{ get { return new Command(() =>
+        public override ICommand Remove{ get { return new Command(async () =>
         {
             IsEdited = false;
             IsStarted = false;
-            _parent.Tasks.Remove(this);
-            // TODO notifier le serveur de la suppression de cette task
+            Project.Tasks.Remove(this);
+            await ApiSingleton.Instance.Api.deletetaskAsync(ApiSingleton.Instance.access_token, Project.projectId, taskId);
         }); } }
 
         public override void UpdateDurationText()
         {
             StartStopText = IsStarted ? "Stop" : "Start";
-            DurationColor = IsStarted ? HighlightColor : DefaultColor;            
+            DurationColor = IsStarted ? HighlightColor : DefaultColor;
+            
             TimeSpan totalDuration = Duration;
-            if(IsStarted) totalDuration = totalDuration.Add(DateTime.Now - TimesList[TimesList.Count-1].StartDate);
+            if(IsStarted && TimesList.Count>0) totalDuration = totalDuration.Add(DateTime.Now - TimesList[TimesList.Count-1].StartDate);
             DurationText = (totalDuration.Hours > 0 ? totalDuration.Hours+"h " : "") + totalDuration.Minutes + "min";
-            _parent.UpdateDurationText();
+            Project.UpdateDurationText();
         }
 
         public override ICommand StartOrStopCommand

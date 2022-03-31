@@ -2,14 +2,40 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
+using TimeTracker.API;
+using TimeTracker.API.Projects;
 using Xamarin.Forms;
 
 namespace TimeTracker.ViewModels.ListViewItems
 {
         public sealed class Project : ProjectTask
     {
+        public override bool IsEdited { 
+            get
+            {
+                return base.IsEdited;
+            }
+            set
+            {
+                if (!value)
+                {
+                    // le titre du projet a potentiellement été modifié : informer le serveur ici
+                    ApiSingleton.Instance.Api.modifprojetAsync(ApiSingleton.Instance.access_token, Title, "", projectId).ContinueWith((
+                        async task =>
+                        {
+                            Response<ProjectItem> response = await task;
+                            // TODO : vérifier erreur
+                        })
+                    );
+                }
+
+                base.IsEdited = value;
+            } 
+        }
         private ObservableCollection<Task> _tasks;
         public readonly MainPageViewModel MainPageViewModelRef;
+
+        public long projectId;
         public Task StartedObj{ get; set; }
 
 
@@ -19,9 +45,10 @@ namespace TimeTracker.ViewModels.ListViewItems
             set => SetValue(ref _tasks, value);
         }
 
-        public void AddTask(String title)
+        private void AddTask(String title)
         {
-            AddTask(new Task(title, this));
+            Task t = new Task(title, this, Tasks.Count);
+            AddTask(t);
         }
         public void AddTask(Task t)
         {
@@ -29,37 +56,45 @@ namespace TimeTracker.ViewModels.ListViewItems
         }
         
         
-        public Project(string title, MainPageViewModel mainPageViewModelRef) : base(mainPageViewModelRef)
+        public Project(string title, MainPageViewModel mainPageViewModelRef, long projectId) : base(mainPageViewModelRef)
         {
             Title = title;
             MainPageViewModelRef = mainPageViewModelRef;
+            this.projectId = projectId;
             _tasks = new ObservableCollection<Task>();
             if (mainPageViewModelRef.ColorList.Count == 0) Color = Color.White;
             else Color = mainPageViewModelRef.ColorList[mainPageViewModelRef.Projects.Count % mainPageViewModelRef.ColorList.Count];
             UpdateDurationText();
         }
+
+        public Project(MainPageViewModel mainPageViewModelRef, Response<ProjectItem> response) : this(
+            response.Data.Name, mainPageViewModelRef, response.Data.Id)
+        {
+            
+        }
+
         public TimeSpan TotalDuraction()
         {
             TimeSpan res = new TimeSpan();
             res = res.Add(Duration);
             foreach (var variable in _tasks)
             {
-                if (variable.IsStarted)
+                if (variable.IsStarted && variable.lastTimes()!=null)
                 {
-                    res = res.Add(DateTime.Now - variable.TimesList[variable.TimesList.Count - 1].StartDate);
+                    res = res.Add(DateTime.Now - variable.lastTimes()!.StartDate);
                 }
                 res = res.Add(variable.Duration);
             }
             return res;
         }
         
-        public override ICommand Remove{ get { return new Command(() =>
+        public override ICommand Remove{ get { return new Command(async () =>
         {
             IsEdited = false;
             //IsStarted = false;
             MainPageViewModelRef.RemoveAllTasks(this.Tasks);
             MainPageViewModelRef.Projects.Remove(this);
-            // TODO notifier le serveur de la suppression de ce projet
+            await ApiSingleton.Instance.Api.deleteprojetAsync(ApiSingleton.Instance.access_token, projectId);
         }); } }
 
         public void OpenTaskView()

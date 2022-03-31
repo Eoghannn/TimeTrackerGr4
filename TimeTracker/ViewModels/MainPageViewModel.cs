@@ -7,6 +7,7 @@ using Microcharts;
 using Rg.Plugins.Popup.Extensions;
 using SkiaSharp;
 using TimeTracker.API;
+using TimeTracker.API.Accounts;
 using TimeTracker.API.Projects;
 using TimeTracker.Model;
 using TimeTracker.ViewModels.ListViewItems;
@@ -17,8 +18,6 @@ namespace TimeTracker.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
-        private string _token;
-        private Api _api;
         public void RemoveAllTasks(Collection<Task> tasks)
         {
             foreach (var task in tasks)
@@ -66,7 +65,6 @@ namespace TimeTracker.ViewModels
 
         public MainPageViewModel(Button newProjectButton, ColorList colorList )
         {
-            _token = Preferences.Get("access_token", "error_token");
             LastTaskNotEmpty = "False";
             Projects = new ObservableCollection<Project>();
             ColorList = new List<Color>();
@@ -85,11 +83,12 @@ namespace TimeTracker.ViewModels
         {
             get
             {
-                return new Command(() =>
+                return new Command(async () =>
                 {
-                    Project p = new Project("Nouveau Projet", this);
+                    Response<ProjectItem> response = await ApiSingleton.Instance.Api.createprojetAsync( ApiSingleton.Instance.access_token, "Nouveau Projet", "");
+                    // TODO : vérifier erreur
+                    Project p = new Project(this, response);
                     Projects.Add(p);
-                    // /!\ ne pas éditer avant d'ajouter à la liste sinon pb
                     p.IsEdited = true;
                 });
             }
@@ -115,36 +114,40 @@ namespace TimeTracker.ViewModels
         
         public async void PopulateData()
         {
-            // TODO y'a plus qu'a peuplé la liste de projet avec les bons projets + leurs tâches avec add task, une task possède .TimesList, une list<Times> qui correspond au nombre de fois où cette tâche a été lancé / stoppé, à set correctement aussi vient le constructeur de Times prévu pour
-            Response<List<ProjectItem>> listProjets = await _api.getprojetsAsync(_token);
+            Response<List<ProjectItem>> listProjets = await ApiSingleton.Instance.Api.getprojetsAsync(ApiSingleton.Instance.access_token);
+            // TODO : vérifier erreur
             int i = 0;
-            if (listProjets.Data.Count == 0)
-            {
-                Projects.Add(new Project("Il n'existe pas de projets pour le moment", this));
-            }
-            else
+            Projects.Clear();
+            if (listProjets.Data != null && listProjets.Data.Count > 0)
             {
                 foreach (ProjectItem projets in listProjets.Data)
                 {
-                    Projects.Add(new Project(projets.Name, this));
-                    Response<List<TaskItem>> listTask = await _api.gettasksAsync(_token, projets.Id);
+                    Project p = new Project(projets.Name, this, projets.Id);
+                    Projects.Add(p);
+                    Response<List<TaskItem>> listTask = await ApiSingleton.Instance.Api.gettasksAsync(ApiSingleton.Instance.access_token, projets.Id);
+                    // TODO : vérifier erreur
                     foreach (TaskItem tasks in listTask.Data)
                     {
-                        Projects[i].AddTask(tasks.Name);
+                        Task t = new Task(tasks.Name, p, tasks.Id);
+                        Projects[i].AddTask(t);
+                        foreach (var time in tasks.Times)
+                        {
+                            Debug.WriteLine(t.taskId + "; " +time.StartTime + " / "+time.EndTime);
+                            t.addTimes(new Times(t, time.Id, time.StartTime, time.EndTime));
+                        }
+                        t.UpdateDurationText();
                     }
+
+                    i++;
                 }
             }
 
-
-            /*Projects.Add(new Project("Projet Xamarin", this));
-            Projects.Add(new Project("Devoir Outils Exploration Données", this));
-            Projects.Add(new Project("Projet Flutter", this));
-            Project p = new Project("dazda", this);
-            Projects.Add(p);
-            Debug.WriteLine(Projects.Count);
-            Projects[0].AddTask("Implémentation des vues");
-            Projects.Remove(p);
-            Debug.WriteLine(Projects.Count);*/
+            Response<UserProfileResponse> userProfileResponse = await ApiSingleton.Instance.Api.getmeAsync(ApiSingleton.Instance.access_token);
+            if (userProfileResponse.IsSucess)
+            {
+                nomPrenomString = userProfileResponse.Data.FirstName + " " + userProfileResponse.Data.LastName;
+                EmailString = userProfileResponse.Data.Email;
+            }
         }
 
         
@@ -156,6 +159,22 @@ namespace TimeTracker.ViewModels
                 LastTaskNotEmpty = value == null ? "False" : "True";
                 SetValue(ref _lastTask, value);
             }
+        }
+
+        private String _nomPrenomString;
+
+        public String nomPrenomString
+        {
+            get => _nomPrenomString;
+            set => SetValue(ref _nomPrenomString, value);
+        }
+        
+        private String _emailString;
+
+        public String EmailString
+        {
+            get => _emailString;
+            set => SetValue(ref _emailString, value);
         }
     }
 }

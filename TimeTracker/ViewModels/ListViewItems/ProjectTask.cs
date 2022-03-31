@@ -49,7 +49,6 @@ namespace TimeTracker.ViewModels.ListViewItems
             set
             {
                 SetValue(ref _duration, value);
-                // TODO mettre à jour le serveur ici ( sur la durée de la task / project ) avec tempTS
             }
         }
         
