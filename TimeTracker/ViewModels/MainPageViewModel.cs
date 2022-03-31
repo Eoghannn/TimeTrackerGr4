@@ -6,14 +6,19 @@ using System.Windows.Input;
 using Microcharts;
 using Rg.Plugins.Popup.Extensions;
 using SkiaSharp;
+using TimeTracker.API;
+using TimeTracker.API.Projects;
 using TimeTracker.Model;
 using TimeTracker.ViewModels.ListViewItems;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TimeTracker.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
-    { 
+    {
+        private string _token;
+        private Api _api;
         public void RemoveAllTasks(Collection<Task> tasks)
         {
             foreach (var task in tasks)
@@ -61,6 +66,7 @@ namespace TimeTracker.ViewModels
 
         public MainPageViewModel(Button newProjectButton, ColorList colorList )
         {
+            _token = Preferences.Get("access_token", "error_token");
             LastTaskNotEmpty = "False";
             Projects = new ObservableCollection<Project>();
             ColorList = new List<Color>();
@@ -107,10 +113,30 @@ namespace TimeTracker.ViewModels
             return entries;
         }
         
-        public void PopulateData()
+        public async void PopulateData()
         {
             // TODO y'a plus qu'a peuplé la liste de projet avec les bons projets + leurs tâches avec add task, une task possède .TimesList, une list<Times> qui correspond au nombre de fois où cette tâche a été lancé / stoppé, à set correctement aussi vient le constructeur de Times prévu pour
-            Projects.Add(new Project("Projet Xamarin", this));
+            Response<List<ProjectItem>> listProjets = await _api.getprojetsAsync(_token);
+            int i = 0;
+            if (listProjets.Data.Count == 0)
+            {
+                Projects.Add(new Project("Il n'existe pas de projets pour le moment", this));
+            }
+            else
+            {
+                foreach (ProjectItem projets in listProjets.Data)
+                {
+                    Projects.Add(new Project(projets.Name, this));
+                    Response<List<TaskItem>> listTask = await _api.gettasksAsync(_token, projets.Id);
+                    foreach (TaskItem tasks in listTask.Data)
+                    {
+                        Projects[i].AddTask(tasks.Name);
+                    }
+                }
+            }
+
+
+            /*Projects.Add(new Project("Projet Xamarin", this));
             Projects.Add(new Project("Devoir Outils Exploration Données", this));
             Projects.Add(new Project("Projet Flutter", this));
             Project p = new Project("dazda", this);
@@ -118,7 +144,7 @@ namespace TimeTracker.ViewModels
             Debug.WriteLine(Projects.Count);
             Projects[0].AddTask("Implémentation des vues");
             Projects.Remove(p);
-            Debug.WriteLine(Projects.Count);
+            Debug.WriteLine(Projects.Count);*/
         }
 
         
