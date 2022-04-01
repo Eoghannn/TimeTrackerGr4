@@ -25,6 +25,7 @@ namespace TimeTracker
 
         private string _oldP;
         private string _newP;
+        private string _vnewP;
 
         public string Fname
         {
@@ -61,12 +62,26 @@ namespace TimeTracker
             set { SetProperty(ref _newP, value); }
         }
 
+        public string VNewP
+        {
+            get { return _vnewP; }
+            set { SetProperty(ref _vnewP, value); }
+        }
+
         private bool _error;
 
         public bool Error
         {
             get { return _error; }
             set { SetProperty(ref _error, value); }
+        }
+
+        private String _textError;
+
+        public String TextError
+        {
+            get { return _textError; }
+            set { SetProperty(ref _textError, value); }
         }
 
         public ICommand Edit { get; }
@@ -113,14 +128,26 @@ namespace TimeTracker
             //et modifier les infos dans le modèle
             try
             {
-                ResponseStandard isSucces = await ApiSingleton.Instance.Api.passwordAsync(ApiSingleton.Instance.access_token, _oldP, _newP);
-                Console.WriteLine(isSucces.ToString());
-                if (Error)
-                    Error = false;
-                showPasswordFields();
+                if (_newP.Equals(_vnewP))
+                {
+                    ResponseStandard isSucces = await ApiSingleton.Instance.Api.passwordAsync(ApiSingleton.Instance.access_token, _oldP, _newP);
+                    Console.WriteLine(isSucces.ToString());
+                    if (Error)
+                        Error = false;
+                    OldP = "";
+                    NewP = "";
+                    VNewP = "";
+                    showPasswordFields();
+                }
+                else
+                {
+                    Error = true;
+                    TextError = "The new passwords are different";
+                }
             } catch(WrongOldPasswordException e)
             {
                 Error = true;
+                TextError = "Wrong old password";
                 Console.WriteLine(e.Message);
             }
 

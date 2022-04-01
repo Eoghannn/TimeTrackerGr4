@@ -21,7 +21,8 @@
             <Button Text="Back" Command="{Binding Edit}" IsVisible="{Binding Visible}" StyleClass="DefaultButton"/>
             <Entry x:Name="oldpwd" WidthRequest="300" IsVisible="{Binding Visible}" IsPassword="True" Placeholder="Old Password" StyleClass="DefaultEntry" Text="{Binding OldP}"/>
             <Entry x:Name="newpwd" WidthRequest="300" IsVisible="{Binding Visible}" IsPassword="True" Placeholder="New password" StyleClass="DefaultEntry" Text="{Binding NewP}"/>
-            <Label Text="Wrong old password" TextColor="Red" HorizontalOptions="CenterAndExpand" IsVisible="{Binding Error}"/>
+            <Entry x:Name="vnewpwd" WidthRequest="300" IsVisible="{Binding Visible}" IsPassword="True" Placeholder="Verify new password" StyleClass="DefaultEntry" Text="{Binding VNewP}"/>
+            <Label Text="{Binding TextError}" TextColor="Red" HorizontalOptions="CenterAndExpand" IsVisible="{Binding Error}"/>
             <Button Text="Confirm password" Command="{Binding ConfirmP}" IsVisible="{Binding Visible}" StyleClass="DefaultButton"/>
             <StackLayout VerticalOptions="EndAndExpand" HorizontalOptions="Center">
                 <Button Text="Back to menu" Command="{Binding Back}" StyleClass="DefaultButton"/>
