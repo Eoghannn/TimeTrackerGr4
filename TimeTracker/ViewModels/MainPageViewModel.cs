@@ -25,7 +25,7 @@ namespace TimeTracker.ViewModels
             {
                 if (task == LastTask)
                 {
-                    _lastTask = null;
+                    LastTask = null;
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace TimeTracker.ViewModels
 
             foreach (var project in Projects)
             {
-                ChartEntry chartEntry = new ChartEntry(project.TotalDuraction().Minutes+1); // On commence tjr à 1 
+                ChartEntry chartEntry = new ChartEntry(project.TotalDuraction().Minutes);
                 chartEntry.Color = SKColor.Parse(project.Color.ToHex());
                 if (project.Title.Length > max_label_length) chartEntry.Label = project.Title.Substring(0, max_label_length-3) + "...";
                 else chartEntry.Label = project.Title;

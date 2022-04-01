@@ -15,6 +15,14 @@ namespace TimeTracker.ViewModels.ListViewItems
 
         public void addTimes(Times t)
         {
+            if (t.EndDate == t.StartDate)
+            {
+                // la task n'a pas été arrêté ( sûrement car l'utilisateur a quitté l'application sans l'arrêté )
+                // dans ce cas on peut mettre enddate à null 
+                t.EndDate = null;
+                // et faire un end
+                t.End();
+            }
             Duration = Duration.Add(t.Duration());
             TimesList.Add(t);
         }

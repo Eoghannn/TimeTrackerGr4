@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TimeTracker.API.Authentications;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
 namespace TimeTracker;
@@ -21,24 +22,32 @@ public class ApiSingleton
     
     private string refresh_token;
     private int expires_in;
-    private DateTime created_at;
 
     public void login(LoginResponse response)
     {
         _access_token = response.AccessToken;
         Preferences.Set("refresh_token", response.RefreshToken);
         Preferences.Set("expires_in", response.ExpiresIn);
-        created_at = DateTime.Now;
-        Preferences.Set("created_at", created_at);
         expires_in = response.ExpiresIn;
         refresh_token = response.RefreshToken;
-    }
 
-    public bool isExpired()
-    {
-        return created_at.Add(TimeSpan.FromSeconds(expires_in)) < DateTime.Now;
+        
+        // On refresh le token automatiquement avant qu'il expire ( 120 secondes avant, pourquoi pas )
+        Device.StartTimer(TimeSpan.FromSeconds(expires_in-120),  () =>
+        {
+            refreshToken().ContinueWith((async task =>
+            {
+                bool autoLogged = await task;
+                if (!autoLogged)
+                {
+                    // il y a eu un problème avec le refresh token --> l'utilisateur a besoin de se reconnecter 
+                    await Application.Current.MainPage.Navigation.PopToRootAsync();
+                }
+            }));
+            return false;
+        });
     }
-
+    
     public void logout()
     {
         Preferences.Set("refresh_token", "");
@@ -50,11 +59,6 @@ public class ApiSingleton
 
     public async Task<bool> refreshToken()
     {
-        if (isExpired())
-        {
-            return false;
-        }
-
         Response<LoginResponse> response = await Api.refreshAsync(refresh_token);
         if (response.IsSucess)
         {
@@ -69,6 +73,5 @@ public class ApiSingleton
     {
         refresh_token = Preferences.Get("refresh_token", "");
         expires_in = Preferences.Get("expires_in", 0);
-        created_at = Preferences.Get("created_at", DateTime.Now);
     }
 }

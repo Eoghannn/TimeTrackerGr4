@@ -51,7 +51,6 @@ namespace TimeTracker.ViewModels
                     Task t = new Task(response.Data.Name, parent.project, response.Data.Id);
                     Tasks.Add(t);
                     t.IsEdited = true;
-                    
                 });
             }
         }
@@ -62,7 +61,7 @@ namespace TimeTracker.ViewModels
 
             foreach (var task in Tasks)
             {
-                ChartEntry chartEntry = new ChartEntry(task.Duration.Minutes+1); // On commence tjr à 1 
+                ChartEntry chartEntry = new ChartEntry(task.Duration.Minutes); 
                 chartEntry.Color = SKColor.Parse(task.Color.ToHex());
                 if (task.Title.Length > max_label_length) chartEntry.Label = task.Title.Substring(0, max_label_length-3) + "...";
                 else chartEntry.Label = task.Title;
