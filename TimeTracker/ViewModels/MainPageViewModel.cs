@@ -75,6 +75,10 @@ namespace TimeTracker.ViewModels
                 ColorList.Add(colorList[i]);
             }
             PopulateData(); 
+            
+            Debug.WriteLine("Application.Current.MainPage.Navigation.NavigationStack");
+            Debug.WriteLine(Application.Current.MainPage.Navigation.NavigationStack);
+            Debug.WriteLine(Application.Current.MainPage.Navigation.NavigationStack.Count);
         }
 
         public ICommand GoToProfil => new Command(async () => await NavigationService.PushAsync(new Profile(this)));

@@ -71,25 +71,11 @@ namespace TimeTracker
             }
         }
         
-        public async void testLoggin() 
-        {
-            bool isLoggedin = await ApiSingleton.Instance.refreshToken();
-            if (isLoggedin)
-            {
-                await NavigationService.PushAsync<MainPage>();
-            }
-        }
-
         public LoginViewModel()
         {
-
             _error = false;
             Register = new Command(goToRegister);
             Confirm = new Command(goToMain);
-            
-            // lors de la connection, on regarde si l'utilisateur s'était déjà connecté sur ce device, dans ce cas il possède un refresh token, s'il n'est pas expiré il doit pouvoir se log à partir de celui ci
-            //testLoggin();
-            
         }
     }
 }
