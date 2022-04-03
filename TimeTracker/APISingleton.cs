@@ -7,6 +7,7 @@ using Xamarin.Forms.Internals;
 
 namespace TimeTracker;
 using TimeTracker.API;
+using TimeTracker.API.ThrowException;
 
 public class ApiSingleton
 {
@@ -59,14 +60,21 @@ public class ApiSingleton
 
     public async Task<bool> refreshToken()
     {
-        Response<LoginResponse> response = await Api.refreshAsync(refresh_token);
-        if (response.IsSucess)
+        try
         {
-            login(response.Data);
-            return true;
+            Response<LoginResponse> response = await Api.refreshAsync(refresh_token);
+            if (response.IsSucess)
+            {
+                login(response.Data);
+                return true;
+            }
+
+            return false;
+        } catch (WrongRefreshTokenException e)
+        {
+            return false;
         }
 
-        return false;
     }
 
     private ApiSingleton()
